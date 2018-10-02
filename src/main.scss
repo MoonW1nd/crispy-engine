@@ -30,6 +30,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   position: absolute;
   left: 0;
   right: 0;
@@ -56,7 +57,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
 
   &-Item {
@@ -110,5 +111,27 @@ body {
   &-Image {
     width: 111px;
     height: 38px;
+  }
+}
+
+.MainContent {
+  max-width: 1029px;
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  &-Title {
+    font-size: 2em;
+    margin: 32px 0;
+    align-self: flex-start;
+  }
+
+  &-ContentHolder {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-row: auto;
   }
 }
