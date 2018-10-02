@@ -2,7 +2,7 @@
 
 function renderCard(parent, cardData) {
   const template = document.getElementsByClassName('CardTemplate')[0];
-  const templateContent = template.content;
+  const templateContent = document.importNode(template.content, true);
   const articleElements = {};
 
   articleElements.main = templateContent.querySelector('.Article');
@@ -24,7 +24,9 @@ function renderCard(parent, cardData) {
         break;
 
       default:
-        articleElements[key].textContent = cardData[key];
+        if (Object(cardData[key]) !== cardData[key]) {
+          articleElements[key].textContent = cardData[key];
+        }
     }
   });
 

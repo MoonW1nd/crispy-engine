@@ -1,0 +1,21 @@
+.Article {
+  border-radius: $border-radius_primary;
+  background-color: $background-color_card_primary;
+  border: 1px solid red;
+  box-sizing: border-box;
+
+  &_size_s {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
+  &_size_m {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+
+  &_size_l {
+    grid-column: span 4;
+    grid-row: span 3;
+  }
+}

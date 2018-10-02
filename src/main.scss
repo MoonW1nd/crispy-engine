@@ -7,6 +7,8 @@ $text-color_primary_light: rgba(#333333, 0.6);
 $text-color_secondary: #858585;
 $background-color_primary: #ffffff;
 $background-color_secondary: #f7f7f7;
+$background-color_card_primary: #fafafa;
+$background-color_card_secondary: #f3f3f3;
 $divider-color: #f0f0f0;
 $accent-color: #ffd93e;
 $accent-color_dark: #ffcd00;
@@ -131,7 +133,8 @@ body {
 
   &-ContentHolder {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-auto-flow: dense;
+    grid-template-columns: repeat(6, 1fr);
     grid-row: auto;
   }
 }
