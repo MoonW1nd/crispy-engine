@@ -6,7 +6,7 @@ function renderCard(parent, cardData) {
   const articleElements = {};
 
   articleElements.main = templateContent.querySelector('.Article');
-  articleElements.icon = templateContent.querySelector('.Title-Icon');
+  articleElements.icon = templateContent.querySelector('.Title-IconWrapper');
   articleElements.title = templateContent.querySelector('.Title-Content');
   articleElements.source = templateContent.querySelector('.Article-Source');
   articleElements.time = templateContent.querySelector('.Article-Time');
@@ -21,6 +21,10 @@ function renderCard(parent, cardData) {
 
       case 'size':
         articleElements.main.classList.add(`Article_size_${cardData[key]}`);
+        break;
+
+      case 'icon':
+        articleElements[key].innerHTML = `<img src="./assets/${cardData[key]}.svg" class="Title-Icon" alt="${cardData[key]}"/>`;
         break;
 
       default:

@@ -33,12 +33,12 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  overflow: hidden;
+  // position: absolute;
+  // left: 0;
+  // right: 0;
+  // top: 0;
+  // bottom: 0;
+  // overflow: hidden;
 }
 
 *:active,
@@ -135,6 +135,8 @@ body {
     display: grid;
     grid-auto-flow: dense;
     grid-template-columns: repeat(6, 1fr);
-    grid-row: auto;
+    grid-auto-rows: min-content(171px);
+    grid-gap: 20px;
+    flex-grow: 1;
   }
 }

@@ -1,12 +1,17 @@
 .Article {
   border-radius: $border-radius_primary;
   background-color: $background-color_card_primary;
-  border: 1px solid red;
+  border: 1px solid red; // debug !TODO: remove this shit
   box-sizing: border-box;
+  padding: 20px;
 
   &_size_s {
     grid-column: span 2;
     grid-row: span 1;
+
+    & .Article-Info {
+      flex-direction: column;
+    }
   }
 
   &_size_m {
@@ -17,5 +22,41 @@
   &_size_l {
     grid-column: span 4;
     grid-row: span 3;
+  }
+
+  &-Info {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-size: 1.125em;
+  }
+
+  &-Description {
+    margin-top: 25px;
+    font-size: 1.25em;
+  }
+}
+
+.Title {
+  display: flex;
+  align-items: center;
+
+  &-IconWrapper {
+    display: inline-flex;
+    height: 52px;
+    width: 52px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-Content {
+    margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-left: 16px;
+    font-size: 1.5em;
+    text-align: left;
+    display: inline;
   }
 }
