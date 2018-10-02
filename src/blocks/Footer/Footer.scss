@@ -1,0 +1,45 @@
+.Footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 14px 0 29px;
+  flex-shrink: 0;
+
+  &-Menu {
+    margin-left: 45px;
+  }
+
+  &-Copyright {
+    margin: 0;
+    padding: 0;
+    font-size: 0.75em;
+    margin-right: 42px;
+    color: $text-color_secondary;
+  }
+}
+
+@media (max-width: 650px) {
+  .Footer {
+    display: block;
+    margin-bottom: 10px;
+    padding: 0 20px;
+
+    &-Menu {
+      margin-left: 0;
+
+      .Menu-ListItem {
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .Menu-Item {
+        margin: 0 5px 10px;
+      }
+    }
+
+    &-Copyright {
+      text-align: center;
+      margin-top: 10px;
+      margin-right: 0;
+    }
+  }
+}

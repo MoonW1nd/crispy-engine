@@ -112,7 +112,7 @@ function serve() {
 
 function assets() {
   return gulp
-    .src(['src/data/assets/**'])
+    .src(['src/assets/**'])
     .pipe(plumber())
     .pipe(newer('build/assets'))
     .pipe(imagemin())

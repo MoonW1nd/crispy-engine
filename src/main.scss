@@ -1,3 +1,114 @@
-.body {
-  background-color:red;
+// CONSTANTS
+$pan-transition: 0.5s linear transform;
+
+// COLORS
+$text-color_primary: #333333;
+$text-color_primary_light: rgba(#333333, 0.6);
+$text-color_secondary: #858585;
+$background-color_primary: #ffffff;
+$background-color_secondary: #f7f7f7;
+$divider-color: #f0f0f0;
+$accent-color: #ffd93e;
+$accent-color_dark: #ffcd00;
+
+// sizes
+$font-size_primary: 16px;
+$font-size_mobile: 11px;
+$border-radius_primary: 20px;
+$font-family: 'Arial', 'Helvetica', 'Nimbus Sans L', sans-serif;
+
+html {
+  font-size: $font-size_primary;
+  font-family: $font-family;
+}
+
+body {
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  color: $text-color_primary;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+*:active,
+*:hover,
+*:focus {
+  outline: none;
+}
+
+*:focus {
+  box-shadow: 0 0 2px 2px #{rgba(#4a5cd0, 0.7)};
+}
+
+.Menu {
+  font-size: 1em;
+
+  &-ListItem {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  &-Item {
+    margin-right: 28px;
+
+    &_state_active a {
+      color: $text-color_primary;
+    }
+
+    a {
+      text-decoration: none;
+      color: $text-color_primary_light;
+
+      &:hover,
+      &:active {
+        color: $text-color_primary;
+      }
+    }
+  }
+
+  &-Icon {
+    width: 16px;
+    height: 13px;
+  }
+
+  &-Button {
+    display: none;
+    appearance: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  &_size_small {
+    font-size: 0.75em;
+
+    .Menu-Item {
+      margin-right: 17px;
+    }
+  }
+}
+
+.Logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  z-index: 2;
+
+  &-Image {
+    width: 111px;
+    height: 38px;
+  }
 }
