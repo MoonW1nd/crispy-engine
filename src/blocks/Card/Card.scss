@@ -15,7 +15,7 @@
       background-color: $background-color_card_secondary;
     }
 
-    .Article-Description {
+    .Article-Content {
       background-color: $background-color_card_secondary;
     }
   }
@@ -51,14 +51,40 @@
     margin-top: 14px;
   }
 
-  &-Description {
-    font-size: 1.25em;
-    width: 100%;
+  &-Data_type_graph {
+    height: 316px;
+    position: relative;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    overflow: hidden;
+  }
+
+  &-Data_type_image {
+    height: 424px;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  &-Content {
+    background-color: $background-color_card_primary;
     margin: 5px -20px -20px -20px;
     padding: 20px 20px 20px 20px;
+    width: 100%;
     border-radius: 20px;
-    background-color: $background-color_card_primary;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     flex-grow: 1;
+  }
+
+  &-Description {
+    font-size: 1.25em;
+    margin-bottom: 11px;
+  }
+
+  &-Data {
+    margin-top: 20px;
   }
 
   &-CloseButton {
@@ -84,6 +110,12 @@
       padding-bottom: 14px;
     }
   }
+}
+
+.DataImage {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 .Button {

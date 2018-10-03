@@ -43,6 +43,12 @@ function renderCard(parent, cardData) {
       default:
         if (Object(cardData[key]) !== cardData[key]) {
           articleElements[key].textContent = cardData[key];
+        } else if (cardData[key].type === 'graph') {
+          articleElements[key].classList.add('Article-Data_type_graph');
+          articleElements[key].innerHTML = '<img src="./assets/richdata.svg" class="DataImage" alt="График"/>';
+        } else if ('image' in cardData[key]) {
+          articleElements[key].classList.add('Article-Data_type_image');
+          articleElements[key].innerHTML = '<img src="./assets/image.jpg" class="DataImage" alt="График"/>';
         }
     }
   });
