@@ -1,0 +1,23 @@
+.PageContent {
+  max-width: 1029px;
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  &-Title {
+    font-size: 2em;
+    margin: 32px 0;
+    align-self: flex-start;
+  }
+
+  &-ContentGrid {
+    display: grid;
+    grid-auto-flow: dense;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 20px;
+    flex-grow: 1;
+  }
+}

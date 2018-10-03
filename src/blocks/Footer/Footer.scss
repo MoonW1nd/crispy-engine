@@ -18,6 +18,58 @@
   }
 }
 
+.Menu {
+  font-size: 1em;
+
+  &-ListItem {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &-Item {
+    margin-right: 28px;
+
+    &_state_active a {
+      color: $text-color_primary;
+    }
+
+    a {
+      text-decoration: none;
+      color: $text-color_primary_light;
+
+      &:hover,
+      &:active {
+        color: $text-color_primary;
+      }
+    }
+  }
+
+  &-Icon {
+    width: 16px;
+    height: 13px;
+  }
+
+  &-Button {
+    display: none;
+    appearance: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  &_size_small {
+    font-size: 0.75em;
+
+    .Menu-Item {
+      margin-right: 17px;
+    }
+  }
+}
+
 @media (max-width: 650px) {
   .Footer {
     display: block;

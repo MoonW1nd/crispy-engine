@@ -60,7 +60,7 @@ function renderCard(parent, cardData) {
 const data = require('./data/events.json');
 
 window.onload = () => {
-  const parent = document.querySelector('.MainContent-ContentHolder');
+  const parent = document.querySelector('.PageContent-ContentGrid');
 
   data.events.forEach((eventData) => {
     renderCard(parent, eventData);
