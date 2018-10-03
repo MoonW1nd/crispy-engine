@@ -1,9 +1,12 @@
 .Article {
   border-radius: $border-radius_primary;
   background-color: $background-color_card_primary;
-  border: 1px solid red; // debug !TODO: remove this shit
+  border: 1px solid rebeccapurple; // debug !TODO: remove this shit
   box-sizing: border-box;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 
   &_size_s {
     grid-column: span 2;
@@ -25,16 +28,47 @@
   }
 
   &-Info {
-    margin-top: 14px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    font-size: 1.125em;
+    font-size: 1.13em;
+  }
+
+  &-Source,
+  &-Time {
+    margin-top: 14px;
   }
 
   &-Description {
-    margin-top: 25px;
     font-size: 1.25em;
+    width: 100%;
+    margin: 5px -20px -20px -20px;
+    padding: 20px 20px 20px 20px;
+    border-radius: 20px;
+    background-color: $background-color_card_primary;
+    flex-grow: 1;
+  }
+
+  &-CloseButton {
+    appearance: none;
+    background: transparent;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    border: 0;
+    padding: 0;
+  }
+
+  &_type_critical {
+    background-color: $background-color_card_critical;
+
+    & .Article-Header {
+      color: #ffffff;
+    }
+
+    & .Article-Info {
+      padding-bottom: 14px;
+    }
   }
 }
 

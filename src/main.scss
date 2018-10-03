@@ -9,6 +9,7 @@ $background-color_primary: #ffffff;
 $background-color_secondary: #f7f7f7;
 $background-color_card_primary: #fafafa;
 $background-color_card_secondary: #f3f3f3;
+$background-color_card_critical: #db5341;
 $divider-color: #f0f0f0;
 $accent-color: #ffd93e;
 $accent-color_dark: #ffcd00;
@@ -135,7 +136,7 @@ body {
     display: grid;
     grid-auto-flow: dense;
     grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: min-content(171px);
+    // grid-auto-rows: min-content(171px);
     grid-gap: 20px;
     flex-grow: 1;
   }
