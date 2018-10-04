@@ -11,35 +11,64 @@ function getTemplateContent(templateClassName) {
 
 function setDataWidget(dataElement, data) {
   const element = dataElement;
+  const isGraphWidget = data.type === 'graph';
+  const isImageWidget = 'image' in data && typeof data.image === 'string';
+  const isThermalWidget = 'temperature' in data && 'humidity' in data;
+  const isConfirmButtonsWidget = 'buttons' in data && Array.isArray(data.buttons);
+  const isMusicWidget = 'albumcover' in data
+    && 'artist' in data
+    && 'track' in data
+    && 'volume' in data;
 
-  if (data.type === 'graph') {
-    element.classList.add('Article-Data_type_graph');
-    element.innerHTML = getImageHtml('richdata', 'svg', 'DataImage', 'График');
-  } else if ('image' in data) {
-    element.classList.add('Article-Data_type_image');
+  switch (true) {
+    case isGraphWidget: {
+      element.classList.add('Article-Data_type_graph');
+      element.innerHTML = getImageHtml('richdata', 'svg', 'DataImage', 'График');
+      break;
+    }
 
-    const imageDate = data.image.split('.');
-    const imageName = imageDate[0];
-    const imageExtension = imageDate[1];
+    case isImageWidget: {
+      element.classList.add('Article-Data_type_image');
+      const imageDate = data.image.split('.');
+      const imageName = imageDate[0];
+      const imageExtension = imageDate[1];
+      element.innerHTML = getImageHtml(imageName, imageExtension, 'DataImage');
+      break;
+    }
 
-    element.innerHTML = getImageHtml(imageName, imageExtension, 'DataImage');
-  } else if ('temperature' in data && 'humidity' in data) {
-    const templateContent = getTemplateContent('ThermalWidgetTemplate');
+    case isThermalWidget: {
+      const templateContent = getTemplateContent('ThermalWidgetTemplate');
 
-    templateContent.querySelector('.ThermalWidget-TemperatureValue').innerHTML = data.temperature;
-    templateContent.querySelector('.ThermalWidget-HumidityValue').innerHTML = data.humidity;
+      templateContent.querySelector('.ThermalWidget-TemperatureValue').innerHTML = data.temperature;
+      templateContent.querySelector('.ThermalWidget-HumidityValue').innerHTML = data.humidity;
 
-    const clone = document.importNode(templateContent, true);
-    element.appendChild(clone);
-  } else if ('buttons' in data && Array.isArray(data.buttons)) {
-    const templateContent = getTemplateContent('ConfirmButtonsWidgetTemplate');
-    [
-      templateContent.querySelector('.WidgetButton_type_confirm').innerHTML,
-      templateContent.querySelector('.WidgetButton_type_cancel').innerHTML,
-    ] = data.buttons;
+      const clone = document.importNode(templateContent, true);
+      element.appendChild(clone);
+      break;
+    }
 
-    const clone = document.importNode(templateContent, true);
-    element.appendChild(clone);
+    case isConfirmButtonsWidget: {
+      const templateContent = getTemplateContent('ConfirmButtonsWidgetTemplate');
+      [
+        templateContent.querySelector('.WidgetButton_type_confirm').innerHTML,
+        templateContent.querySelector('.WidgetButton_type_cancel').innerHTML,
+      ] = data.buttons;
+
+      const clone = document.importNode(templateContent, true);
+      element.appendChild(clone);
+      break;
+    }
+
+    case isMusicWidget: {
+      const templateContent = getTemplateContent('MusicWidgetTemplate');
+
+      const clone = document.importNode(templateContent, true);
+      element.appendChild(clone);
+      break;
+    }
+
+    default:
+      // throw Error('Не удалось определить тип виджета.');
   }
 }
 

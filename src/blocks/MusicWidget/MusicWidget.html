@@ -1,0 +1,28 @@
+<template class="MusicWidgetTemplate">
+  <div class="MusicWidget">
+    <div class="MusicWidget-TopSection">
+      <img class="MusicWidget-AlbumImage"></img>
+      <div class="MusicWidget-TrackInfo">
+        <div class="MusicWidget-Track">
+          <span class="MusicWidget-TrackArtist"></span>
+          -
+          <span class="MusicWidget-TrackName"></span>
+        </div>
+        <div class="MusicWidget-TimeControl">
+          <input type="range" name="TimeControl" class="MusicWidget-TimeControlInput">
+          <span class="MusicWidget-TrackDuration"></span>
+        </div>
+      </div>
+    </div>
+    <div class="MusicWidget-BottomSection">
+      <div class="MusicWidget-TrackSwitcher">
+        <button class="MusicWidget-ButtonSwitch ButtonSwitch ButtonSwitch_type_previous"></button>
+        <button class="MusicWidget-ButtonSwitch ButtonSwitch ButtonSwitch_type_next"></button>
+      </div>
+      <div class="MusicWidget-VolumeControl">
+        <input type="range" name="ValumeControl" class="MusicWidget-VolumeControlInput">
+        <span class="MusicWidget-VolumeValue"></span>
+      </div>
+    </div>
+  </div>
+</template>
