@@ -1,5 +1,3 @@
-'use strict';
-
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const newer = require('gulp-newer');
@@ -17,15 +15,14 @@ const concat = require('gulp-concat');
 const removeEmptyLines = require('gulp-remove-empty-lines');
 const browserify = require('browserify');
 const postHTML = require('gulp-posthtml');
-const babelify = require('babelify');
+const babelify = require('babelify'); //eslint-disable-line
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const htmlv = require('gulp-html-validator');
 
 // DEFINE ENVIRONMENTS
 
-const development = environments.development;
-const production = environments.production;
+const { development, production } = environments;
 
 const babelOptions = {
   presets: [
@@ -64,7 +61,7 @@ function styles() {
 const path = 'src';
 
 const options = {};
-const plugins = [require('posthtml-include')({ root: `${path}` })];
+const plugins = [require('posthtml-include')({ root: `${path}` })]; // eslint-disable-line
 
 function html() {
   return gulp
@@ -86,7 +83,7 @@ function validateHTML() {
 }
 
 function javaScript() {
-  const bundleStream = browserify('src/main.js') // Передача входной точки для browserify
+  const bundleStream = browserify('src/main.js')
     .transform('babelify', babelOptions)
     .bundle();
 
