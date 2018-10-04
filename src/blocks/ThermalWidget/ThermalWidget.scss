@@ -1,0 +1,14 @@
+.ThermalWidget {
+  &-Temperature {
+    display: inline;
+  }
+
+  &-Humidity {
+    display: inline;
+    margin-left: 50px;
+  }
+
+  &-HumidityValue {
+    margin-right: -3px;
+  }
+}

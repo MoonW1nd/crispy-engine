@@ -1,7 +1,6 @@
 .Article {
   border-radius: $border-radius_primary;
   background-color: $background-color_card_primary;
-  border: 1px solid rebeccapurple; // debug !TODO: remove this shit
   box-sizing: border-box;
   padding: 20px;
   display: flex;
@@ -76,11 +75,14 @@
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+
+    &:empty {
+      display: none;
+    }
   }
 
   &-Description {
     font-size: 1.25em;
-    margin-bottom: 11px;
   }
 
   &-Data {

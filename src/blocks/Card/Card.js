@@ -18,6 +18,15 @@ function setDataWidget(dataElement, data) {
     const imageExtension = imageDate[1];
 
     element.innerHTML = getImageHtml(imageName, imageExtension, 'DataImage');
+  } else if ('temperature' in data && 'humidity' in data) {
+    const template = document.getElementsByClassName('ThermalWidgetTemplate')[0];
+    const templateContent = document.importNode(template.content, true);
+
+    templateContent.querySelector('.ThermalWidget-TemperatureValue').innerHTML = data.temperature;
+    templateContent.querySelector('.ThermalWidget-HumidityValue').innerHTML = data.humidity;
+
+    const clone = document.importNode(templateContent, true);
+    element.appendChild(clone);
   }
 }
 
@@ -42,7 +51,7 @@ function getArticleElements(templateContent) {
 function render(parent, cardData) {
   const template = document.getElementsByClassName('CardTemplate')[0];
   const templateContent = document.importNode(template.content, true);
-  const articleElements = getArticleElements();
+  const articleElements = getArticleElements(templateContent);
 
   Object.keys(cardData).forEach((key) => {
     switch (key) {
@@ -80,10 +89,15 @@ function render(parent, cardData) {
   });
 
   Object.keys(articleElements).forEach((element) => {
-    if (!articleElements[element].innerHTML) {
+    if (!articleElements[element].innerHTML.trim()) {
       articleElements[element].parentNode.removeChild(articleElements[element]);
     }
   });
+
+  const contentWrapper = templateContent.querySelector('.Article-Content');
+  if (!contentWrapper.innerHTML.trim()) {
+    contentWrapper.parentNode.removeChild(contentWrapper);
+  }
 
   const clone = document.importNode(templateContent, true);
   parent.appendChild(clone);
