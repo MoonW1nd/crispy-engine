@@ -4,6 +4,11 @@ function getImageHtml(nameImage, extension, className, alt = null) {
 }
 
 
+function getTemplateContent(templateClassName) {
+  const template = document.getElementsByClassName(templateClassName)[0];
+  return document.importNode(template.content, true);
+}
+
 function setDataWidget(dataElement, data) {
   const element = dataElement;
 
@@ -19,11 +24,19 @@ function setDataWidget(dataElement, data) {
 
     element.innerHTML = getImageHtml(imageName, imageExtension, 'DataImage');
   } else if ('temperature' in data && 'humidity' in data) {
-    const template = document.getElementsByClassName('ThermalWidgetTemplate')[0];
-    const templateContent = document.importNode(template.content, true);
+    const templateContent = getTemplateContent('ThermalWidgetTemplate');
 
     templateContent.querySelector('.ThermalWidget-TemperatureValue').innerHTML = data.temperature;
     templateContent.querySelector('.ThermalWidget-HumidityValue').innerHTML = data.humidity;
+
+    const clone = document.importNode(templateContent, true);
+    element.appendChild(clone);
+  } else if ('buttons' in data && Array.isArray(data.buttons)) {
+    const templateContent = getTemplateContent('ConfirmButtonsWidgetTemplate');
+    [
+      templateContent.querySelector('.WidgetButton_type_confirm').innerHTML,
+      templateContent.querySelector('.WidgetButton_type_cancel').innerHTML,
+    ] = data.buttons;
 
     const clone = document.importNode(templateContent, true);
     element.appendChild(clone);
@@ -49,8 +62,7 @@ function getArticleElements(templateContent) {
 
 
 function render(parent, cardData) {
-  const template = document.getElementsByClassName('CardTemplate')[0];
-  const templateContent = document.importNode(template.content, true);
+  const templateContent = getTemplateContent('CardTemplate');
   const articleElements = getArticleElements(templateContent);
 
   Object.keys(cardData).forEach((key) => {

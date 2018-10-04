@@ -1,0 +1,32 @@
+.WidgetButton {
+  font-size: 1.25rem;
+  border: 0;
+  color: $text-color-primary;
+  height: 54px;
+  width: 132px;
+  background-color: #e5e5e5;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 18px;
+
+  &:hover,
+  &:active {
+    background-color: darken(#e5e5e5, 3%);
+  }
+
+  b {
+    position: relative;
+    top: 2px;
+    left: 1px;
+  }
+
+  &_type_confirm {
+    background-color: $accent-color;
+
+    &:hover,
+    &:active {
+      background-color: $accent-color_dark;
+    }
+  }
+}
