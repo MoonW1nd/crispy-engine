@@ -1,13 +1,8 @@
 /* global document */
-function getImageHtml(nameImage, extension, className, alt = null) {
-  return `<img src="./assets/${nameImage}.${extension}" class="${className}" alt="${alt != null ? alt : nameImage}"/>`;
-}
-
-
-function getTemplateContent(templateClassName) {
-  const template = document.getElementsByClassName(templateClassName)[0];
-  return document.importNode(template.content, true);
-}
+import { getImageHtml, getTemplateContent } from '../_helpers/_helpers';
+import renderConfirmButtonsWidget from '../ConfirmButtonsWidget/ConfirmButtonsWidget';
+import renderThermalWidget from '../ThermalWidget/ThermalWidget';
+import renderMusicWidget from '../MusicWidget/MusicWidget';
 
 function setDataWidget(dataElement, data) {
   const element = dataElement;
@@ -37,33 +32,17 @@ function setDataWidget(dataElement, data) {
     }
 
     case isThermalWidget: {
-      const templateContent = getTemplateContent('ThermalWidgetTemplate');
-
-      templateContent.querySelector('.ThermalWidget-TemperatureValue').innerHTML = data.temperature;
-      templateContent.querySelector('.ThermalWidget-HumidityValue').innerHTML = data.humidity;
-
-      const clone = document.importNode(templateContent, true);
-      element.appendChild(clone);
+      renderThermalWidget(element, data);
       break;
     }
 
     case isConfirmButtonsWidget: {
-      const templateContent = getTemplateContent('ConfirmButtonsWidgetTemplate');
-      [
-        templateContent.querySelector('.WidgetButton_type_confirm').innerHTML,
-        templateContent.querySelector('.WidgetButton_type_cancel').innerHTML,
-      ] = data.buttons;
-
-      const clone = document.importNode(templateContent, true);
-      element.appendChild(clone);
+      renderConfirmButtonsWidget(element, data);
       break;
     }
 
     case isMusicWidget: {
-      const templateContent = getTemplateContent('MusicWidgetTemplate');
-
-      const clone = document.importNode(templateContent, true);
-      element.appendChild(clone);
+      renderMusicWidget(element, data);
       break;
     }
 
@@ -90,7 +69,7 @@ function getArticleElements(templateContent) {
 }
 
 
-function render(parent, cardData) {
+export function render(parent, cardData) {
   const templateContent = getTemplateContent('CardTemplate');
   const articleElements = getArticleElements(templateContent);
 

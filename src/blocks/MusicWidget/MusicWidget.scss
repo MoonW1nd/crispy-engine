@@ -1,0 +1,67 @@
+.MusicWidget {
+  &-AlbumImage {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+  }
+
+  &-TopSection,
+  &-BottomSection {
+    display: flex;
+    align-items: center;
+  }
+
+  &-BottomSection {
+    margin-top: 20px;
+  }
+
+  &-TrackInfo {
+    margin-left: 16px;
+    width: 100%;
+  }
+
+  &-TimeControl {
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  &-VolumeControl {
+    display: flex;
+    margin-left: 16px;
+    flex-grow: 1;
+    font-size: 0.88em;
+    align-items: center;
+    color: $text-color_secondary;
+  }
+
+
+  &-TimeControlInput,
+  &-VolumeControlInput {
+    flex-grow: 1;
+  }
+
+  &-TrackDuration,
+  &-VolumeValue {
+    font-size: 0.88em;
+    margin-left: 16px;
+    color: $text-color_secondary;
+  }
+
+  .ButtonSwitch {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+
+    &_type_next {
+      transform: scale(-1);
+      margin-left: 27px;
+    }
+  }
+}
+
