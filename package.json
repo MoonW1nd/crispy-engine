@@ -10,6 +10,11 @@
     "htmlv": "gulp validateHTML",
     "clean": "gulp clean"
   },
+  "husky":{
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MoonW1nd/crispy-engine.git"
