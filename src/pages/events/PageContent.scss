@@ -21,3 +21,16 @@
     flex-grow: 1;
   }
 }
+
+@media (max-width: 750px) {
+  .PageContent {
+    &-ContentGrid {
+      grid-template-columns: 1fr;
+      margin: 0 10px;
+    }
+
+    &-Title {
+      margin: 80px 10px 19px;
+    }
+  }
+}

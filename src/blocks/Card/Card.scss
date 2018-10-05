@@ -7,6 +7,42 @@
   flex-direction: column;
   position: relative;
 
+  .Button {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    display: none;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 17px;
+    height: 17px;
+    z-index: 1;
+  }
+
+  &-Info {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    font-size: 1.13em;
+  }
+
+  &-Content {
+    background-color: $background-color_card_primary;
+    margin: 5px -20px -20px -20px;
+    padding: 20px 20px 20px 20px;
+    width: 100%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+
+    &:empty {
+      display: none;
+    }
+  }
+
   &:hover {
     box-shadow: 0 2px 6px 0 rgba(197, 186, 186, 0.5);
 
@@ -16,6 +52,10 @@
 
     .Article-Content {
       background-color: $background-color_card_secondary;
+    }
+
+    .Button {
+      display: block;
     }
   }
 
@@ -38,13 +78,6 @@
     grid-row: span 3;
   }
 
-  &-Info {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    font-size: 1.13em;
-  }
-
   &-Source,
   &-Time {
     margin-top: 14px;
@@ -63,22 +96,6 @@
     position: relative;
     border-radius: 20px;
     overflow: hidden;
-  }
-
-  &-Content {
-    background-color: $background-color_card_primary;
-    margin: 5px -20px -20px -20px;
-    padding: 20px 20px 20px 20px;
-    width: 100%;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-grow: 1;
-
-    &:empty {
-      display: none;
-    }
   }
 
   &-Description {
@@ -120,13 +137,6 @@
   width: 100%;
 }
 
-.Button {
-  appearance: none;
-  background: transparent;
-  border: 0;
-  padding: 0;
-}
-
 .Title {
   display: flex;
   align-items: center;
@@ -147,5 +157,35 @@
     font-size: 1.5em;
     text-align: left;
     display: inline;
+  }
+}
+
+@media (max-width: 750px) {
+  .Article {
+    &-Info {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 1.13em;
+    }
+
+    &_size_s {
+      grid-column: span 1;
+      grid-row: span 1;
+
+      & .Article-Info {
+        flex-direction: row;
+      }
+    }
+
+    &_size_m {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+
+    &_size_l {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
   }
 }
