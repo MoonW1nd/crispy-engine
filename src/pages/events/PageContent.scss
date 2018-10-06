@@ -1,14 +1,16 @@
 .PageContent {
-  max-width: 1029px;
+  max-width: 1070px;
   width: 100%;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  padding: 0 25px;
+  box-sizing: border-box;
 
   &-Title {
-    font-size: 2em;
+    font-size: adaptiveSize(36, 24);
     margin: 32px 0;
     align-self: flex-start;
   }
@@ -24,7 +26,7 @@
 
 @media (max-width: 750px) {
   .PageContent {
-    padding-left: 20px;
+    padding: 0 25px;
     box-sizing: border-box;
     &-ContentGrid {
       grid-template-columns: 1fr;

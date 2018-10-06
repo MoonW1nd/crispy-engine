@@ -1,4 +1,5 @@
 .ThermalWidget {
+  font-size: adaptiveSize(18, 14);
   &-Temperature {
     display: inline;
   }

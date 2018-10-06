@@ -2,3 +2,21 @@ Todo:
   ☐ Разобраться с white в ThermalWidget
   ☐ Реализовать появлени крестика и стрелки по ховеру
   ☐ Для стрелки сделать при наложении на другие элементы заметны blur
+  ☐ Добавить котролы в сообщение с пылесосом для 2-го задания
+
+Адаптивная типографика:
+  ✔ Main-Title: 36 -> 24 @done(18-10-06 13:07)
+  ✔ Article-Description: @done(18-10-06 14:18)
+    ✔ 20 -> 18 @done(18-10-06 13:13)
+    ✔ 24 -> 18 (size large); @done(18-10-06 14:18)
+  ✔ Article-Title: 20 -> 14 @done(18-10-06 14:18)
+  ✔ Article-Info: 18 -> 12 @done(18-10-06 13:26)
+  ✔ Weather-Widget: 18 -> 14 @done(18-10-06 14:18)
+  ✔ MusicWidget: 20 -> 18 @done(18-10-06 13:30)
+  ✔ IconSize: 50 -> 35 @done(18-10-06 13:22)
+  ☐ настоить адаптвность для кнопок
+
+minWidth - 320px
+maxWidth - 1920px
+// calc(minFontSize + (maxFontSize - minFontSize) * (100vw - minScreenSize) / (maxScreenSize-minScreenSize))
+
