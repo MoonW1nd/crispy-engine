@@ -24,9 +24,12 @@
 
 @media (max-width: 750px) {
   .PageContent {
+    padding-left: 20px;
+    box-sizing: border-box;
     &-ContentGrid {
       grid-template-columns: 1fr;
-      margin: 0 10px;
+      grid-gap: 0;
+      grid-row-gap: 20px;
     }
 
     &-Title {
