@@ -2,11 +2,11 @@
   border-radius: $border-radius_primary;
   background-color: $background-color_card_primary;
   box-sizing: border-box;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  overflow: hidden;
 
   .Button {
     appearance: none;
@@ -28,15 +28,20 @@
     font-size: adaptiveSize(18, 12);
   }
 
+  &-Header {
+    padding: adaptiveSize(20, 17);
+    box-sizing: border-box;
+  }
+
   &-Content {
     background-color: $background-color_card_primary;
-    margin: 5px -20px -20px -20px;
-    padding: 20px 20px 20px 20px;
     width: 100%;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    padding: adaptiveSize(20, 17);
+    box-sizing: border-box;
     flex-grow: 1;
 
     &:empty {
@@ -158,7 +163,7 @@
 .DataImage {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  height: 100%;
 }
 
 .Title {
@@ -167,10 +172,12 @@
 
   &-IconWrapper {
     display: inline-flex;
-    height: adaptiveSize(52, 35);
-    width: adaptiveSize(52, 35);
     align-items: center;
     justify-content: center;
+  }
+
+  &-Icon {
+    width: adaptiveSize(52, 35);
   }
 
   &-Content {

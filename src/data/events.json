@@ -143,7 +143,7 @@
             "description": "Робопылесос не смог сменить свое местоположение в течение последних 3 минут. Похоже, ему нужна помощь.",
             "icon": "cam",
             "data": {
-                "image": "robot-cleaner.jpg"
+                "image": "robot-cleaner.png"
             },
             "size": "l"
         },

@@ -15,18 +15,27 @@
     background-color: darken(#e5e5e5, 3%);
   }
 
-  b {
-    position: relative;
-    top: 2px;
-    left: 1px;
-  }
-
   &_type_confirm {
     background-color: $accent-color;
 
     &:hover,
     &:active {
       background-color: $accent-color_dark;
+    }
+  }
+}
+@media (max-width: 450px) {
+  .ConfirmButtonsWidget {
+    margin-right: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .WidgetButton {
+    margin-right: 0;
+    &_type_confirm {
+      margin-right: 17px;
     }
   }
 }
