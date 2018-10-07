@@ -1,6 +1,6 @@
 /* global document window */
 import { render } from './blocks/Card/Card';
-import { rotateEvent } from './blocks/_helpers/_events';
+import touchEvents from './blocks/_helpers/_events';
 import { getTruncateHandler } from './blocks/_helpers/_helpers';
 
 
@@ -22,9 +22,7 @@ window.onload = () => {
   });
   const element = parent.querySelector('.Article-Data_type_image img');
 
-  // swipeEvent(element);
-  // pinchEvent(element);
-  rotateEvent(element);
+  touchEvents(element.parentNode, element);
 
   // оптимизация resize событий
   (function () { //eslint-disable-line
