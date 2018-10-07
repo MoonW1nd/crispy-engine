@@ -28,7 +28,7 @@ window.onload = () => {
     truncate();
     truncateHandlers.push(truncate);
   });
-  const element = parent.querySelector('.Article-Data_type_image img');
+  const element = parent.querySelector('.Card-Data_type_image img');
 
   touchEvents(element.parentNode, element);
 
