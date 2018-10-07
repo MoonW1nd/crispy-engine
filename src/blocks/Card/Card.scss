@@ -41,6 +41,7 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: adaptiveSize(20, 17);
+    margin-top: -17px;
     box-sizing: border-box;
     flex-grow: 1;
 
@@ -68,19 +69,22 @@
 
   &-Source,
   &-Time {
-    margin-top: 14px;
+    margin-top: 18px;
   }
 
   &-Data_type_graph {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     width: 100%;
+    min-height: adaptiveSize(316, 144);
     padding-top: 40%;
     overflow: hidden;
+    box-sizing: border-box;
     position: relative;
 
     img {
         position: absolute;
+        width: 100%;
         top: 0;
         bottom: 0;
         left: 0;
@@ -94,13 +98,14 @@
     overflow: hidden;
     position: relative;
     border-radius: 20px;
+    pointer-events: none;
 
     img {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
 
@@ -109,7 +114,7 @@
   }
 
   &-Data {
-    margin-top: 20px;
+    margin-top: 31px;
   }
 
   &-CloseButton {
@@ -169,6 +174,7 @@
 .Title {
   display: flex;
   align-items: center;
+  height: adaptiveSize(52, 35);
 
   &-IconWrapper {
     display: inline-flex;
@@ -218,6 +224,10 @@
       & .Article-Description {
         font-size: adaptiveSize(20, 18);
       }
+    }
+
+    &-Data_type_image {
+      pointer-events: auto;
     }
   }
 

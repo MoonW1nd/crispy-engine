@@ -54,8 +54,9 @@ body {
 
 @function adaptiveSize($desctopFontSize, $mobileFontSize) {
   // минимальный размер 375 а не 320 так как, макет с размерами шрифтов дан под 375
+  // минимальный размер 1370 а не 1920 так как, макет с размерами шрифтов дан под 1920
   $minScreenWidth: 375;
-  $maxScreenWidth: 1920;
+  $maxScreenWidth: 1370;
   @return calc(#{$mobileFontSize}px + (#{$desctopFontSize} - #{$mobileFontSize}) *
     (100vw - #{$minScreenWidth}px) / (#{$maxScreenWidth} - #{$minScreenWidth}));
 }

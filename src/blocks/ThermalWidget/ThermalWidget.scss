@@ -13,3 +13,17 @@
     margin-right: -3px;
   }
 }
+
+@media (max-width: 450px) {
+  .ThermalWidget {
+    margin-right: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    &-Humidity {
+      margin-left: 0;
+    }
+  }
+}
+

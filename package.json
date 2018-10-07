@@ -10,7 +10,7 @@
     "htmlv": "gulp validateHTML",
     "clean": "gulp clean"
   },
-  "husky":{
+  "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
