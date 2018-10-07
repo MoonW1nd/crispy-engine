@@ -4,7 +4,6 @@ export default function touchEvents(parentNode, domNode) {
   const zoomValueElement = parent.parentNode.querySelector('.DataInfo-ZoomValue');
   const lightValueElement = parent.parentNode.querySelector('.DataInfo-LightValue');
   let lightValue = 1;
-  console.log(zoomValueElement, lightValueElement, parent);
   let currentGesture = null;
   let pointers = [];
 
@@ -90,21 +89,17 @@ export default function touchEvents(parentNode, domNode) {
       pointers[currentPointerIndex].x = event.x;
       pointers[currentPointerIndex].y = event.y;
 
-
-      // if (pointers.length === 2 && event.pointerId === pointers[1].pointerId) {
-      // let coords = getCoords(manipulator);
+      // обработка вращения
       if (event.pointerId === pointers[1].pointerId) {
         const RAD_TO_DEG = 180 / Math.PI;
+        const centerX = anotherPointer.x;
+        const centerY = anotherPointer.y;
 
         // 0.1 - добавлено для того чтобы не было деления 0
-        // const centerX = anotherPointer.x - event.x / 2;
-        const centerX = anotherPointer.x;
-        // const centerY = anotherPointer.y - event.y / 2;
-        const centerY = anotherPointer.y;
         widthRect = event.x - centerX + 0.1;
         heightRect = event.y - centerY;
-        let angle = Math.atan(-widthRect / heightRect);
 
+        let angle = Math.atan(-widthRect / heightRect);
         if (heightRect < 0) angle += Math.PI;
         angle *= RAD_TO_DEG;
         if (angle < 0) angle = 360 + angle;
@@ -127,20 +122,15 @@ export default function touchEvents(parentNode, domNode) {
           element.style.filter = `brightness(${lightValue})`;
           lightValueElement.innerHTML = Math.round((lightValue - 0.5) * 100 / 5);
 
-
           currentGesture.currentRotate = rotate;
         }
 
         currentGesture.prevRotate = angle;
       }
 
-      let diff = 0;
-
+      // реализация pinch
       if (currentGesture.prevRotate !== 0 && currentGesture.prevDiameter !== 0) {
-        // debugger;
-        // const rotateDiff = currentGesture.prevRotate - angle;
-        // const rotate = currentGesture.currentRotate - rotateDiff;
-        diff = currentGesture.prevDiameter - diameter;
+        const diff = currentGesture.prevDiameter - diameter;
         let scale = currentGesture.currentScale - diff / 100;
 
         // ограничение масштабирования
