@@ -77,10 +77,10 @@ export function pinchEvent(domNode) {
 
     element.setPointerCapture(event.pointerId);
     // pointers.push(event);
-    console.log(pointers);
+    // console.log(pointers);
 
 
-    console.log('start');
+    // console.log('start');
 
     const pointerInfo = {
       pointerId: event.pointerId,
@@ -162,6 +162,111 @@ export function pinchEvent(domNode) {
   const moveToStartPosition = (event) => {
     pointers = pointers.filter(pointer => pointer.pointerId !== event.pointerId);
     console.log('pointermove', event.pointerId, pointers);
+  };
+
+  element.parentNode.addEventListener('pointerup', moveToStartPosition);
+  element.parentNode.addEventListener('pointercancel', moveToStartPosition);
+}
+
+
+export function rotateEvent(domNode) {
+  const element = domNode;
+  let pointers = [];
+  let currentGesture = null;
+
+  // const nodeState = {
+  //   startPosition: 0,
+  // };
+
+  element.parentNode.addEventListener('pointerdown', (event) => {
+    element.style.transition = 'none';
+    element.style.userSelect = 'none';
+    element.style.touchAction = 'none';
+
+    element.setPointerCapture(event.pointerId);
+    // pointers.push(event);
+    // console.log(pointers);
+
+
+    // console.log('start');
+
+    const pointerInfo = {
+      pointerId: event.pointerId,
+      startX: event.x,
+      startY: event.y,
+      prevX: event.x,
+      x: event.x,
+      y: event.y,
+      startPositionX: parseInt(/[-,0-9]+/.exec(element.style.left), 10) || 0,
+      startRotation: 0,
+      startScale: 0,
+    };
+
+    pointers.push(pointerInfo);
+
+    if (!currentGesture) {
+      currentGesture = {
+        startX: event.x,
+        prevX: event.x,
+        prevTs: Date.now(),
+        startPosition: parseInt(/[-,0-9]+/.exec(element.style.left), 10) || 0,
+        diameter: 0,
+        prevDiameter: 0,
+        prevZoom: 0,
+        currentRotate: parseInt(/[-,0-9]+/.exec(element.style.transform), 10) || 1,
+        prevRotate: 0,
+      };
+    }
+  });
+
+
+  element.parentNode.addEventListener('pointermove', (event) => {
+    if (pointers.length < 2) {
+      return;
+    }
+
+
+    const currentPointerIndex = pointers.findIndex(
+      pointer => pointer.pointerId === event.pointerId,
+    );
+
+
+    if (pointers.length === 2 && event.pointerId === pointers[1].pointerId) {
+      // let coords = getCoords(manipulator);
+
+      const RAD_TO_DEG = 180 / Math.PI;
+
+      // 0.1 - добавлено для того чтобы не было деления 0
+      const anotherPointerIndex = currentPointerIndex === 0 ? 1 : 0;
+      const anotherPointer = pointers[anotherPointerIndex];
+      // const centerX = anotherPointer.x - event.x / 2;
+      const centerX = anotherPointer.x;
+      // const centerY = anotherPointer.y - event.y / 2;
+      const centerY = anotherPointer.y;
+      const widthRect = event.x - centerX + 0.1;
+      const heightRect = event.y - centerY;
+      let angle = Math.atan(-widthRect / heightRect);
+
+      if (heightRect < 0) angle += Math.PI;
+      angle *= RAD_TO_DEG;
+      if (angle < 0) angle = 360 + angle;
+
+
+      if (currentGesture.prevRotate !== 0) {
+        const diff = currentGesture.prevRotate - angle;
+        const rotate = currentGesture.currentRotate - diff;
+        element.style.transform = `rotate(${rotate}deg)`;
+
+        currentGesture.currentRotate = rotate;
+      }
+
+      currentGesture.prevRotate = angle;
+    }
+  });
+
+  const moveToStartPosition = (event) => {
+    pointers = pointers.filter(pointer => pointer.pointerId !== event.pointerId);
+    if (pointers.length === 0) currentGesture = null;
   };
 
   element.parentNode.addEventListener('pointerup', moveToStartPosition);
