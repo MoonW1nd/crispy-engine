@@ -191,6 +191,10 @@
   }
 }
 
+.DataInfo {
+  display: none;
+}
+
 @media (max-width: 750px) {
   .Article {
     &_size_s {
@@ -215,5 +219,13 @@
         font-size: adaptiveSize(20, 18);
       }
     }
+  }
+
+  .DataInfo {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.75em;
+    margin-top: 15px;
   }
 }

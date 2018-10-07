@@ -23,11 +23,18 @@ function setDataWidget(dataElement, data) {
     }
 
     case isImageWidget: {
-      element.classList.add('Article-Data_type_image');
       const imageDate = data.image.split('.');
       const imageName = imageDate[0];
       const imageExtension = imageDate[1];
-      element.innerHTML = getImageHtml(imageName, imageExtension, 'DataImage');
+      element.innerHTML = `
+        <div class="Article-DataImageWrapper Article-Data_type_image">
+          ${getImageHtml(imageName, imageExtension, 'DataImage')}
+        </div>
+        <div class="DataInfo Article-DataInfoWrapper">
+          <div class="DataInfo-Zoom">Приближение: <span class="DataInfo-ZoomValue">0</span>%</div>
+          <div class="DataInfo-Light">Яркость: <span class="DataInfo-LightValue">10</span>%</div>
+        </div>
+      `;
       break;
     }
 

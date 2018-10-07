@@ -1,6 +1,10 @@
 export default function touchEvents(parentNode, domNode) {
   const element = domNode;
   const parent = parentNode;
+  const zoomValueElement = parent.parentNode.querySelector('.DataInfo-ZoomValue');
+  const lightValueElement = parent.parentNode.querySelector('.DataInfo-LightValue');
+  let lightValue = 1;
+  console.log(zoomValueElement, lightValueElement, parent);
   let currentGesture = null;
   let pointers = [];
 
@@ -104,13 +108,27 @@ export default function touchEvents(parentNode, domNode) {
         if (heightRect < 0) angle += Math.PI;
         angle *= RAD_TO_DEG;
         if (angle < 0) angle = 360 + angle;
-        // console.log(angle);
 
         if (currentGesture.prevRotate !== 0) {
+          if (Math.abs(currentGesture.prevRotate - angle) > 300) {
+            currentGesture.prevRotate = angle;
+          }
           const rotateDiff = currentGesture.prevRotate - angle;
-          // const rotate = currentGesture.currentRotate - rotateDiff
+          const rotate = currentGesture.currentRotate - rotateDiff;
 
-          currentGesture.currentRotate = rotateDiff;
+          lightValue += rotate * 5 / (360 * 50);
+
+          if (lightValue < 0.5) {
+            lightValue = 0.5;
+          } else if (lightValue > 5.5) {
+            lightValue = 5.5;
+          }
+
+          element.style.filter = `brightness(${lightValue})`;
+          lightValueElement.innerHTML = Math.round((lightValue - 0.5) * 100 / 5);
+
+
+          currentGesture.currentRotate = rotate;
         }
 
         currentGesture.prevRotate = angle;
@@ -124,12 +142,17 @@ export default function touchEvents(parentNode, domNode) {
         // const rotate = currentGesture.currentRotate - rotateDiff;
         diff = currentGesture.prevDiameter - diameter;
         let scale = currentGesture.currentScale - diff / 100;
+
+        // ограничение масштабирования
         if (scale < 1) {
           scale = 1;
+        } else if (scale > 10) {
+          scale = 10;
         }
 
         if (Math.abs(diff) > 5) {
           element.style.transform = `scale(${scale})`;
+          zoomValueElement.innerHTML = Math.round((scale - 1) * 100 / 9);
           currentGesture.currentScale = scale;
         }
       }
