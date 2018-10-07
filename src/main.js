@@ -6,8 +6,16 @@ import { getTruncateHandler } from './blocks/_helpers/_helpers';
 
 const data = require('./data/events.json');
 
+function isTouchDevice() {
+  return Boolean('ontouchstart' in window);
+}
+
 window.onload = () => {
   const parent = document.querySelector('.PageContent-ContentGrid');
+
+  if (isTouchDevice()) {
+    document.querySelector('body').classList.add('touch');
+  }
 
   data.events.forEach((eventData) => {
     render(parent, eventData);

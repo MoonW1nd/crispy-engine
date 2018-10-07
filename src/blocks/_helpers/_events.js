@@ -69,7 +69,19 @@ export default function touchEvents(parentNode, domNode) {
       const { prevX } = pointers[0];
       const { x } = event;
       const dx = x - prevX;
-      const shift = currentPositionX + dx;
+      let shift = currentPositionX + dx;
+
+      const scaleAdjust = (parent.getBoundingClientRect().width
+        - element.getBoundingClientRect().width)
+        - (parent.clientWidth - element.clientWidth) + 0.01;
+
+      if ((parent.getBoundingClientRect().width
+        - (element.getBoundingClientRect().width)) > shift + scaleAdjust / 2) {
+        shift = parent.getBoundingClientRect().width
+          - element.getBoundingClientRect().width - scaleAdjust / 2;
+      } else if (shift + scaleAdjust / 2 > 0) {
+        shift = 0 - scaleAdjust / 2;
+      }
 
       element.style.left = `${shift}px`;
 

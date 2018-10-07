@@ -50,7 +50,7 @@
     }
   }
 
-  &:hover {
+  body:not(.touch) &:hover {
     box-shadow: 0 2px 6px 0 rgba(197, 186, 186, 0.5);
 
     &:not(.Article_type_critical) {
@@ -102,10 +102,7 @@
 
     img {
       position: absolute;
-      top: 0;
-      bottom: 0;
       left: 0;
-      right: 0;
     }
   }
 
