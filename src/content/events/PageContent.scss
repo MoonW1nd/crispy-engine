@@ -1,0 +1,47 @@
+.PageContent {
+  max-width: 1070px;
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 25px;
+  box-sizing: border-box;
+
+  &-Title {
+    font-size: adaptiveSize(36, 24);
+    margin: 32px 0;
+    align-self: flex-start;
+  }
+
+  &-ContentGrid {
+    display: grid;
+    grid-auto-flow: dense;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 20px;
+    flex-grow: 1;
+  }
+}
+
+@media (min-width: 1370px) {
+  .PageContent {
+    max-width: adaptiveSize(1070, 335);
+  }
+}
+
+@media (max-width: 750px) {
+  .PageContent {
+    padding: 0 25px;
+    box-sizing: border-box;
+    &-ContentGrid {
+      grid-template-columns: 1fr;
+      grid-gap: 0;
+      grid-row-gap: 20px;
+    }
+
+    &-Title {
+      margin: 57px 0 19px;
+    }
+  }
+}
