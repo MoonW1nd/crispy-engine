@@ -1,4 +1,16 @@
 /* global document window Hls */
+function launchFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+  } else if (element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
+}
+
 window.addEventListener('load', () => {
   function initVideo(videoElement, url) {
     const video = videoElement;
@@ -37,4 +49,9 @@ window.addEventListener('load', () => {
     document.getElementById('video-4'),
     'http://localhost:9191/master?url=http%3A%2F%2Flocalhost%3A3102%2Fstreams%2Fhall%2Fmaster.m3u8',
   );
+
+
+  document.getElementById('video-1').addEventListener('click', () => {
+    launchFullscreen(document.getElementById('video-1'));
+  });
 });
