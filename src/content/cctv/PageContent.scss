@@ -1,4 +1,24 @@
-.video {
-  width: 300px;
-  height: 200px;
+.PageContent {
+  width: 100%;
+  flex: 1;
+
+  &-VideoGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &-VideoWrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 50%;
+    overflow: hidden;
+  }
+
+  &-Video {
+    width: 100%;
+    bottom: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+  }
 }
