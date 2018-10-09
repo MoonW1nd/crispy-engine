@@ -64,15 +64,23 @@ const options = {};
 const plugins = [require('posthtml-include')({ root: `${path}` })]; // eslint-disable-line
 
 function html() {
-  return gulp
+  gulp
     .src(['src/*.html'])
     .pipe(plumber())
     .pipe(postHTML(plugins, options))
     .pipe(minifyHTML())
     .pipe(gulp.dest('build'));
+
+  return gulp
+    .src(['src/pages/**/*.html'])
+    .pipe(plumber())
+    .pipe(postHTML(plugins, options))
+    .pipe(rename({ dirname: '' }))
+    .pipe(minifyHTML())
+    .pipe(gulp.dest('build/pages'));
 }
 
-function validateHTML() {
+function validateHTML() { //eslint-disable-line
   return gulp
     .src(['src/*.html'])
     .pipe(plumber())
@@ -126,6 +134,7 @@ function watch() {
 const build = production()
   ? gulp.series(cleanBuild, gulp.parallel(styles, html, assets, javaScript))
   : gulp.series(
+    cleanBuild,
     gulp.parallel(styles, html, assets, javaScript),
     gulp.parallel(watch, serve),
   );
