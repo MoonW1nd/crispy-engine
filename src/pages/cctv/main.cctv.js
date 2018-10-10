@@ -1,4 +1,7 @@
+import FullScreenVideoPlayer from '../../blocks/FullScreenVideoPlayer/FullScreenVideoPlayer';
+
 /* global document window Hls */
+
 function launchFullscreen(element) {
   if (element.requestFullscreen) {
     element.requestFullscreen();
@@ -54,4 +57,7 @@ window.addEventListener('load', () => {
   document.getElementById('video-1').addEventListener('click', () => {
     launchFullscreen(document.getElementById('video-1'));
   });
+
+  const videoPlayer = new FullScreenVideoPlayer({ player: document.getElementsByClassName('FullScreenVideoPlayer')[0] });
+  videoPlayer.openOnClick(document.getElementById('video-4'));
 });
