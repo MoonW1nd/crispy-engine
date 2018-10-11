@@ -1,8 +1,13 @@
 @import 'src/common.scss';
 @import 'src/blocks/Header/Header.scss';
 @import 'src/blocks/Footer/Footer.scss';
+@import 'src/blocks/VideoPlayer/VideoPlayer.scss';
 @import 'src/content/cctv/PageContent.scss';
 
 .Footer {
   margin: 0;
+}
+
+body {
+  max-height: 100%;
 }

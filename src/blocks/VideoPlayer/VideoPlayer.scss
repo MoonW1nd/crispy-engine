@@ -1,0 +1,19 @@
+.VideoPlayer {
+  position: relative;
+  width: 100%;
+  padding-top: 60%;
+  overflow: hidden;
+
+  &-Video,
+  &-Canvas {
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+  }
+
+  &_hidden {
+    visibility: hidden;
+  }
+}
