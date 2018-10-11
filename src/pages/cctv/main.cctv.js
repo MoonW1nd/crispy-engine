@@ -17,5 +17,9 @@ window.addEventListener('load', () => {
       parent: videoGrid,
       url,
     });
+
+    videoPlayers[`id_${id}`].player.addEventListener('click', () => {
+      videoPlayers[`id_${id}`].toggleFullScreen();
+    });
   });
 });

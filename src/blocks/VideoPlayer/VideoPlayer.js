@@ -1,5 +1,5 @@
 /* global requestAnimationFrame Hls isNaN document */
-import { getTemplateContent } from '../_helpers/_helpers';
+import { getTemplateContent, getBox } from '../_helpers/_helpers';
 
 export default class VideoPlayer {
   constructor(options = {}) {
@@ -47,6 +47,43 @@ export default class VideoPlayer {
     };
 
     loop();
+  }
+
+  toggleFullScreen() {
+    const clone = document.importNode(this.player, true);
+    clone.classList.add('VideoPlayer-Clone');
+    this.parent.parentNode.appendChild(clone);
+
+    const playerBox = getBox(this.player);
+
+    clone.style.width = `${playerBox.width}px`;
+    clone.style.height = `${playerBox.height}px`;
+    clone.style.left = `${playerBox.left}px`;
+    clone.style.top = `${playerBox.top}px`;
+
+    const canvas = clone.querySelector('.VideoPlayer-Canvas');
+    canvas.style.left = clone.style.left;
+    canvas.style.top = clone.style.top;
+    this.parent.parentNode.appendChild(canvas);
+    canvas.classList.add('VideoPlayer-Canvas_fullscreen');
+    const cloneContext = canvas.getContext('2d');
+
+    const loop = () => {
+      cloneContext.drawImage(this.dom.video, 0, 0);
+      requestAnimationFrame(loop);
+    };
+
+    loop();
+
+    const transformOriginX = clone.getBoundingClientRect().left
+      / document.documentElement.clientWidth * 100;
+    const transformOriginY = clone.getBoundingClientRect().top
+      / document.documentElement.clientHeight * 100;
+
+    document.querySelector('body').style.overflow = 'hidden';
+
+    clone.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
+    clone.style.transform = 'scale(10)';
   }
 
   initVideo() {
