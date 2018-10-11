@@ -4,6 +4,12 @@
 @import 'src/blocks/VideoPlayer/VideoPlayer.scss';
 @import 'src/content/cctv/PageContent.scss';
 
+.Footer,
+.Header {
+  background-color: #ffffff;
+  z-index: 5;
+}
+
 .Footer {
   margin: 0;
 }

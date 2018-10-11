@@ -4,6 +4,7 @@
   display: grid;
   grid-template-columns: auto minmax(100px, calc((100vh - 160px) * 1.75)) auto;
   grid-template-rows: 1fr;
+  position: relative;
 
   &-VideoGrid {
     display: grid;

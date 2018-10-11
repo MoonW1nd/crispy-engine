@@ -49,7 +49,7 @@ export default class VideoPlayer {
     loop();
   }
 
-  toggleFullScreen() {
+  openFullScreen() {
     const clone = document.importNode(this.player, true);
     clone.classList.add('VideoPlayer-Clone');
     this.parent.parentNode.appendChild(clone);
@@ -64,6 +64,7 @@ export default class VideoPlayer {
     clone.style.left = `${playerBox.left}px`;
     clone.style.top = `${playerBox.top}px`;
 
+    const fullScreenAreaBox = getBox(this.parent.parentNode);
     // const windowWidth = document.documentElement.clientWidth;
     // const windowHeight = document.documentElement.clientHeight;
 
@@ -98,7 +99,16 @@ export default class VideoPlayer {
 
     canvas.style.left = '0';
     canvas.style.top = '0';
-    // canvas.style.width = currentWidth;
+
+    const resolution = this.getVideoAspectRatio();
+
+    if (resolution <= fullScreenAreaBox.width / fullScreenAreaBox.height) {
+      canvas.style.height = `${fullScreenAreaBox.height}px`;
+      canvas.style.width = '';
+    } else {
+      canvas.style.height = '';
+      canvas.style.width = `${fullScreenAreaBox.width}px`;
+    }
     // canvas.width = this.hls.levels[currentLevel - 1].width;
     // canvas.style.height = currentHeight;
     // canvas.height = this.hls.levels[currentLevel - 1].height;
@@ -123,7 +133,13 @@ export default class VideoPlayer {
     document.querySelector('body').style.overflow = 'hidden';
 
     clone.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
-    clone.style.transform = 'scale(10)';
+
+    // TODO: Сделать рассчет scale
+    clone.style.transform = 'scale(4)';
+
+    clone.addEventListener('click', () => {
+      clone.style.transform = 'scale(1)';
+    });
   }
 
   initVideo() {
@@ -140,18 +156,17 @@ export default class VideoPlayer {
       this.hls = hls;
 
       hls.on(Hls.Events.LEVEL_SWITCHED, () => {
-        const currentLevel = this.hls.currentLevel === -1 ? 0 : this.hls.currentLevel;
-        const resolution = this.hls.levels[currentLevel].width
-          / this.hls.levels[currentLevel].height;
+        const DEFAULT_ASPECT_RATIO = 1.75;
+        const resolution = this.getVideoAspectRatio();
 
-        if (resolution >= 1.75) {
+        if (resolution >= DEFAULT_ASPECT_RATIO) {
           this.dom.canvas.style.height = '100%';
         } else {
           this.dom.canvas.style.width = '100%';
         }
 
-        this.dom.canvas.width = this.hls.levels[currentLevel].width;
-        this.dom.canvas.height = this.hls.levels[currentLevel].height;
+        this.dom.canvas.width = this.hls.levels[this.currentLevel].width;
+        this.dom.canvas.height = this.hls.levels[this.currentLevel].height;
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8';
@@ -159,5 +174,10 @@ export default class VideoPlayer {
         video.play();
       });
     }
+  }
+
+  getVideoAspectRatio() {
+    this.currentLevel = this.hls.currentLevel === -1 ? 0 : this.hls.currentLevel;
+    return this.hls.levels[this.currentLevel].width / this.hls.levels[this.currentLevel].height;
   }
 }

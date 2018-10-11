@@ -19,7 +19,7 @@ window.addEventListener('load', () => {
     });
 
     videoPlayers[`id_${id}`].player.addEventListener('click', () => {
-      videoPlayers[`id_${id}`].toggleFullScreen();
+      videoPlayers[`id_${id}`].openFullScreen();
     });
   });
 });
