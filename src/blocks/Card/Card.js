@@ -27,7 +27,7 @@ function setDataWidget(dataElement, data) {
       const imageName = imageDate[0];
       const imageExtension = imageDate[1];
       element.innerHTML = `
-        <div class="Article-DataImageWrapper Article-Data_type_image">
+        <div class="Article-DataImageWrapper Article-Data_type_image" touch-action="none">
           ${getImageHtml(imageName, imageExtension, 'DataImage')}
         </div>
         <div class="DataInfo Article-DataInfoWrapper">
