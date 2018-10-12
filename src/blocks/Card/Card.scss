@@ -1,4 +1,4 @@
-.Article {
+.Card {
   border-radius: $border-radius_primary;
   background-color: $background-color_card_primary;
   box-sizing: border-box;
@@ -31,6 +31,10 @@
   &-Header {
     padding: adaptiveSize(20, 17);
     box-sizing: border-box;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   &-Content {
@@ -53,11 +57,11 @@
   body:not(.touch) &:hover {
     box-shadow: 0 2px 6px 0 rgba(197, 186, 186, 0.5);
 
-    &:not(.Article_type_critical) {
+    &:not(.Card_type_critical) {
       background-color: $background-color_card_secondary;
     }
 
-    .Article-Content {
+    .Card-Content {
       background-color: $background-color_card_secondary;
     }
 
@@ -130,7 +134,7 @@
     grid-column: span 2;
     grid-row: span 1;
 
-    & .Article-Info {
+    & .Card-Info {
       flex-direction: column;
     }
   }
@@ -144,7 +148,7 @@
     grid-column: span 4;
     grid-row: span 3;
 
-    & .Article-Description {
+    & .Card-Description {
       font-size: adaptiveSize(24, 18);
     }
   }
@@ -152,11 +156,11 @@
   &_type_critical {
     background-color: $background-color_card_critical;
 
-    & .Article-Header {
+    & .Card-Header {
       color: #ffffff;
     }
 
-    & .Article-Info {
+    & .Card-Info {
       padding-bottom: 14px;
     }
   }
@@ -199,12 +203,12 @@
 }
 
 @media (max-width: 750px) {
-  .Article {
+  .Card {
     &_size_s {
       grid-column: span 1;
       grid-row: span 1;
 
-      & .Article-Info {
+      & .Card-Info {
         flex-direction: row;
       }
     }
@@ -218,7 +222,7 @@
       grid-column: span 1;
       grid-row: span 1;
 
-      & .Article-Description {
+      & .Card-Description {
         font-size: adaptiveSize(20, 18);
       }
     }

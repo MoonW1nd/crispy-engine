@@ -8,6 +8,7 @@ export default function touchEvents(parentNode, domNode) {
   let pointers = [];
 
 
+  // Парсит значение css свойства transform и возвращает нужное значение
   function getTransformValue(valueName) {
     const transformValue = element.style.transform;
     let value = null;
@@ -39,15 +40,10 @@ export default function touchEvents(parentNode, domNode) {
 
     const pointerInfo = {
       pointerId: event.pointerId,
-      startX: event.x,
-      startY: event.y,
       prevX: event.x,
       prevY: event.y,
       x: event.x,
       y: event.y,
-      startPositionX: parseInt(/[-,0-9]+/.exec(element.style.left), 10) || 0,
-      startRotation: 0,
-      startScale: 0,
     };
 
     pointers.push(pointerInfo);
@@ -58,10 +54,12 @@ export default function touchEvents(parentNode, domNode) {
     if (!currentGesture) {
       return;
     }
+
     const currentPointerIndex = pointers.findIndex(
       pointer => pointer.pointerId === event.pointerId,
     );
 
+    // Обработка свайпа
     if (pointers.length === 1) {
       const {
         currentPositionX,
@@ -71,14 +69,16 @@ export default function touchEvents(parentNode, domNode) {
       const dx = x - prevX;
       let shift = currentPositionX + dx;
 
-      const scaleAdjust = (parent.getBoundingClientRect().width
-        - element.getBoundingClientRect().width)
-        - (parent.clientWidth - element.clientWidth) + 0.01;
+      // Ограничение свайпа картинки исходя из ее размеров
+      const parentRealWidth = parent.getBoundingClientRect().width;
+      const elementRealWidth = element.getBoundingClientRect().width;
+      const imageOverflow = parentRealWidth - elementRealWidth;
 
-      if ((parent.getBoundingClientRect().width
-        - (element.getBoundingClientRect().width)) > shift + scaleAdjust / 2) {
-        shift = parent.getBoundingClientRect().width
-          - element.getBoundingClientRect().width - scaleAdjust / 2;
+      // 0.1 - добавлено для того чтобы не было деления 0
+      const scaleAdjust = imageOverflow - (parent.clientWidth - element.clientWidth) + 0.01;
+
+      if (imageOverflow > shift + scaleAdjust / 2) {
+        shift = imageOverflow - scaleAdjust / 2;
       } else if (shift + scaleAdjust / 2 > 0) {
         shift = 0 - scaleAdjust / 2;
       }
@@ -104,12 +104,10 @@ export default function touchEvents(parentNode, domNode) {
       // обработка вращения
       if (event.pointerId === pointers[1].pointerId) {
         const RAD_TO_DEG = 180 / Math.PI;
-        const centerX = anotherPointer.x;
-        const centerY = anotherPointer.y;
 
         // 0.1 - добавлено для того чтобы не было деления 0
-        widthRect = event.x - centerX + 0.1;
-        heightRect = event.y - centerY;
+        widthRect = event.x - anotherPointer.x + 0.1;
+        heightRect = event.y - anotherPointer.y;
 
         let angle = Math.atan(-widthRect / heightRect);
         if (heightRect < 0) angle += Math.PI;
@@ -117,6 +115,7 @@ export default function touchEvents(parentNode, domNode) {
         if (angle < 0) angle = 360 + angle;
 
         if (currentGesture.prevRotate !== 0) {
+          // убирает скачек при смене угла вращения 360 -> 0
           if (Math.abs(currentGesture.prevRotate - angle) > 300) {
             currentGesture.prevRotate = angle;
           }

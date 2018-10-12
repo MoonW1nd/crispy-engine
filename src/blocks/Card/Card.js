@@ -17,7 +17,7 @@ function setDataWidget(dataElement, data) {
 
   switch (true) {
     case isGraphWidget: {
-      element.classList.add('Article-Data_type_graph');
+      element.classList.add('Card-Data_type_graph');
       element.innerHTML = getImageHtml('richdata', 'svg', 'DataImage', 'График');
       break;
     }
@@ -27,10 +27,10 @@ function setDataWidget(dataElement, data) {
       const imageName = imageDate[0];
       const imageExtension = imageDate[1];
       element.innerHTML = `
-        <div class="Article-DataImageWrapper Article-Data_type_image" touch-action="none">
+        <div class="Card-DataImageWrapper Card-Data_type_image" touch-action="none">
           ${getImageHtml(imageName, imageExtension, 'DataImage')}
         </div>
-        <div class="DataInfo Article-DataInfoWrapper">
+        <div class="DataInfo Card-DataInfoWrapper">
           <div class="DataInfo-Zoom">Приближение: <span class="DataInfo-ZoomValue">0</span>%</div>
           <div class="DataInfo-Light">Яркость: <span class="DataInfo-LightValue">10</span>%</div>
         </div>
@@ -59,18 +59,18 @@ function setDataWidget(dataElement, data) {
 }
 
 
-function getArticleElements(templateContent) {
+function getCardElements(templateContent) {
   const elements = {};
 
-  elements.main = templateContent.querySelector('.Article');
-  elements.closeButton = templateContent.querySelector('.Article-CloseButton');
-  elements.nextButton = templateContent.querySelector('.Article-NextButton');
+  elements.main = templateContent.querySelector('.Card');
+  elements.closeButton = templateContent.querySelector('.Card-CloseButton');
+  elements.nextButton = templateContent.querySelector('.Card-NextButton');
   elements.icon = templateContent.querySelector('.Title-IconWrapper');
   elements.title = templateContent.querySelector('.Title-Content');
-  elements.source = templateContent.querySelector('.Article-Source');
-  elements.time = templateContent.querySelector('.Article-Time');
-  elements.description = templateContent.querySelector('.Article-Description');
-  elements.data = templateContent.querySelector('.Article-Data');
+  elements.source = templateContent.querySelector('.Card-Source');
+  elements.time = templateContent.querySelector('.Card-Time');
+  elements.description = templateContent.querySelector('.Card-Description');
+  elements.data = templateContent.querySelector('.Card-Data');
 
   return elements;
 }
@@ -78,50 +78,50 @@ function getArticleElements(templateContent) {
 
 export function render(parent, cardData) {
   const templateContent = getTemplateContent('CardTemplate');
-  const articleElements = getArticleElements(templateContent);
+  const cardElements = getCardElements(templateContent);
 
   Object.keys(cardData).forEach((key) => {
     switch (key) {
       case 'type':
-        articleElements.main.classList.add(`Article_type_${cardData[key]}`);
+        cardElements.main.classList.add(`Card_type_${cardData[key]}`);
         break;
 
       case 'size':
-        articleElements.main.classList.add(`Article_size_${cardData[key]}`);
+        cardElements.main.classList.add(`Card_size_${cardData[key]}`);
         break;
 
       case 'icon':
         if (cardData.type === 'info') {
-          articleElements[key].innerHTML = getImageHtml(cardData[key], 'svg', 'Title-Icon');
-          articleElements.closeButton.innerHTML = getImageHtml('cross', 'svg', 'Article-CrossIcon', 'Закрыть');
+          cardElements[key].innerHTML = getImageHtml(cardData[key], 'svg', 'Title-Icon');
+          cardElements.closeButton.innerHTML = getImageHtml('cross', 'svg', 'Card-CrossIcon', 'Закрыть');
         } else if (cardData.type === 'critical') {
-          articleElements[key].innerHTML = getImageHtml(`${cardData[key]}-white`, 'svg', 'Title-Icon');
-          articleElements.closeButton.innerHTML = getImageHtml('cross-white', 'svg', 'Article-CrossIcon', 'Закрыть');
+          cardElements[key].innerHTML = getImageHtml(`${cardData[key]}-white`, 'svg', 'Title-Icon');
+          cardElements.closeButton.innerHTML = getImageHtml('cross-white', 'svg', 'Card-CrossIcon', 'Закрыть');
         } else {
           throw Error('Data Error: не корректный тип события.');
         }
 
-        articleElements.nextButton.innerHTML = getImageHtml('arrow', 'svg', 'Article-NextIcon', 'Дальше');
+        cardElements.nextButton.innerHTML = getImageHtml('arrow', 'svg', 'Card-NextIcon', 'Дальше');
         break;
 
       default:
         if (key !== 'data' && Object(cardData[key]) !== cardData[key]) {
-          articleElements[key].textContent = cardData[key];
+          cardElements[key].textContent = cardData[key];
         } else if (key === 'data') {
-          setDataWidget(articleElements.data, cardData.data);
+          setDataWidget(cardElements.data, cardData.data);
         } else {
           throw Error('Data error: Не корректный формат данных.');
         }
     }
   });
 
-  Object.keys(articleElements).forEach((element) => {
-    if (!articleElements[element].innerHTML.trim()) {
-      articleElements[element].parentNode.removeChild(articleElements[element]);
+  Object.keys(cardElements).forEach((element) => {
+    if (!cardElements[element].innerHTML.trim()) {
+      cardElements[element].parentNode.removeChild(cardElements[element]);
     }
   });
 
-  const contentWrapper = templateContent.querySelector('.Article-Content');
+  const contentWrapper = templateContent.querySelector('.Card-Content');
   if (!contentWrapper.innerHTML.trim()) {
     contentWrapper.parentNode.removeChild(contentWrapper);
   }

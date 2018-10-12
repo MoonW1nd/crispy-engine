@@ -24,6 +24,12 @@
   }
 }
 
+@media (min-width: 1370px) {
+  .PageContent {
+    max-width: adaptiveSize(1070, 335);
+  }
+}
+
 @media (max-width: 750px) {
   .PageContent {
     padding: 0 25px;
