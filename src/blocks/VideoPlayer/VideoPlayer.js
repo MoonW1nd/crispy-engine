@@ -65,34 +65,32 @@ export default class VideoPlayer {
     clone.style.top = `${playerBox.top}px`;
 
     const fullScreenAreaBox = getBox(this.parent.parentNode);
-    // const windowWidth = document.documentElement.clientWidth;
-    // const windowHeight = document.documentElement.clientHeight;
 
-    // let previousWidth = 0;
-    // let previousHeight = 0;
-    // let heightLevel = 0;
-    // let widthLevel = 0;
+    let previousWidth = 0;
+    let previousHeight = 0;
+    let heightLevel = 0;
+    let widthLevel = 0;
 
-    // this.hls.levels.forEach((level) => {
-    //   if (previousWidth < level.width  && level.width < windowWidth) {
-    //     widthLevel += 1;
-    //   }
-    //   if (previousHeight < level.height  && level.height < windowHeight) {
-    //     heightLevel += 1;
-    //   }
-    //   previousWidth = level.width;
-    //   previousHeight = level.height;
-    // });
+    this.hls.levels.forEach((level) => {
+      if (previousWidth < level.width && level.width < fullScreenAreaBox.width) {
+        widthLevel += 1;
+      }
+      if (previousHeight < level.height && level.height < fullScreenAreaBox.height) {
+        heightLevel += 1;
+      }
+      previousWidth = level.width;
+      previousHeight = level.height;
+    });
 
-    // const currentLevel = heightLevel <= widthLevel ? heightLevel : widthLevel;
+    const currentLevel = heightLevel <= widthLevel ? heightLevel : widthLevel;
 
-    // const currentWidth = `${this.hls.levels[currentLevel - 1].width}px`;
-    // const currentHeight = `${this.hls.levels[currentLevel - 1].height}px`;
+    const currentWidth = `${this.hls.levels[currentLevel - 1].width}px`;
+    const currentHeight = `${this.hls.levels[currentLevel - 1].height}px`;
 
-    // this.hls.currentLevel = currentLevel - 1;
+    this.hls.currentLevel = currentLevel - 1;
 
-    // this.dom.video.style.height = currentHeight;
-    // this.dom.video.style.width = currentWidth;
+    this.dom.video.style.height = currentHeight;
+    this.dom.video.style.width = currentWidth;
 
 
     const canvas = clone.querySelector('.VideoPlayer-Canvas');
@@ -109,9 +107,13 @@ export default class VideoPlayer {
       canvas.style.height = '';
       canvas.style.width = `${fullScreenAreaBox.width}px`;
     }
-    // canvas.width = this.hls.levels[currentLevel - 1].width;
+
+
+    canvas.width = this.hls.levels[currentLevel - 1].width;
     // canvas.style.height = currentHeight;
-    // canvas.height = this.hls.levels[currentLevel - 1].height;
+    canvas.height = this.hls.levels[currentLevel - 1].height;
+    const scaleRatioX = fullScreenAreaBox.width / playerBox.width;
+    const scaleRatioY = fullScreenAreaBox.height / playerBox.height;
 
     this.parent.parentNode.appendChild(canvas);
     canvas.classList.add('VideoPlayer-Canvas_fullscreen');
@@ -135,7 +137,7 @@ export default class VideoPlayer {
     clone.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
 
     // TODO: Сделать рассчет scale
-    clone.style.transform = 'scale(4)';
+    clone.style.transform = `scaleX(${scaleRatioX * 2}) scaleY(${scaleRatioY * 2})`;
 
     clone.addEventListener('click', () => {
       clone.style.transform = 'scale(1)';
@@ -146,7 +148,7 @@ export default class VideoPlayer {
     const { video } = this.dom;
 
     if (Hls.isSupported()) {
-      const hls = new Hls({ capLevelToPlayerSize: false });
+      const hls = new Hls({ capLevelToPlayerSize: true });
       hls.loadSource(this.url);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -154,11 +156,12 @@ export default class VideoPlayer {
       });
 
       this.hls = hls;
+      this.hls.currentLevel = 0;
+      this.currentLevel = 0;
 
       hls.on(Hls.Events.LEVEL_SWITCHED, () => {
         const DEFAULT_ASPECT_RATIO = 1.75;
         const resolution = this.getVideoAspectRatio();
-
         if (resolution >= DEFAULT_ASPECT_RATIO) {
           this.dom.canvas.style.height = '100%';
         } else {
