@@ -6,6 +6,8 @@ export default class VideoPlayer {
     this.parent = options.parent;
     this.url = options.url;
     this.button = options.button;
+    this.lightController = options.lightController;
+    this.contrastController = options.contrastController;
     this.setIntervalIndex = null;
     this.dom = {};
     this.typeGrid = true;
@@ -119,6 +121,8 @@ export default class VideoPlayer {
       canvas.width = this.hls.levels[currentLevel].width;
       canvas.height = this.hls.levels[currentLevel].height;
       this.button.show();
+      this.lightController.show();
+      this.contrastController.show();
     }, 500);
   }
 
@@ -130,6 +134,8 @@ export default class VideoPlayer {
     }
 
     this.button.hide();
+    this.lightController.hide();
+    this.contrastController.hide();
     overlay.style.transform = 'scale(1)';
     canvas.style.transform = 'scale(1) translate(0px, 0px)';
 

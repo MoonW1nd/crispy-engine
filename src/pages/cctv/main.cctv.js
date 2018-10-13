@@ -1,5 +1,6 @@
 import VideoPlayer from '../../blocks/VideoPlayer/VideoPlayer';
 import Button from '../../blocks/Button/Button';
+import RangeController from '../../blocks/RangeController/RangeController';
 
 /* global document window */
 
@@ -19,11 +20,24 @@ window.addEventListener('load', () => {
     modifier: 'VideoGrid-ButtonClose',
   });
 
+  const RangeControllerLight = new RangeController({
+    parent: videoGrid,
+    modifier: 'VideoGrid-LightController',
+  });
+
+  const RangeControllerContrast = new RangeController({
+    parent: videoGrid,
+    modifier: 'VideoGrid-ContrastController',
+    type: 'contrast',
+  });
+
   videoLinks.forEach((url, id) => {
     videoPlayers[`id_${id}`] = new VideoPlayer({
       parent: videoGrid,
       url,
       button: ButtonClose,
+      lightController: RangeControllerLight,
+      contrastController: RangeControllerContrast,
     });
 
     videoPlayers[`id_${id}`].player.addEventListener('click', () => {
