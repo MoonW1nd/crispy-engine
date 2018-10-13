@@ -5,6 +5,7 @@ export default class VideoPlayer {
   constructor(options = {}) {
     this.parent = options.parent;
     this.url = options.url;
+    this.button = options.button;
     this.setIntervalIndex = null;
     this.dom = {};
     this.typeGrid = true;
@@ -117,42 +118,27 @@ export default class VideoPlayer {
       this.hls.currentLevel = currentLevel;
       canvas.width = this.hls.levels[currentLevel].width;
       canvas.height = this.hls.levels[currentLevel].height;
+      this.button.show();
     }, 500);
-
-
-    overlay.addEventListener('click', () => {
-      overlay.style.transform = 'scale(1)';
-      canvas.style.transform = 'scale(1) translate(0px, 0px)';
-      setTimeout(() => {
-        this.player.appendChild(canvas);
-        overlay.parentNode.removeChild(overlay);
-        canvas.style.width = '';
-        canvas.style.height = '';
-        canvas.style.transform = '';
-        canvas.style.transformOrigin = '';
-        canvas.style.left = 0;
-        canvas.style.top = 0;
-        this.typeGrid = true;
-        this.hls.currentLevel = 0;
-        canvas.width = this.hls.levels[0].width;
-        canvas.height = this.hls.levels[0].height;
-      }, 300);
-    });
   }
 
   closeFullScreen() {
-    const { overlay, canvas } = this;
+    const { overlay, canvas } = this.dom;
 
     if (overlay == null) {
-      throw Error('Прежде чем вызывать метод closeFullScreen сначала нужно открыть видео в fullScreen режиме');
+      return;
     }
 
+    this.button.hide();
     overlay.style.transform = 'scale(1)';
     canvas.style.transform = 'scale(1) translate(0px, 0px)';
 
     setTimeout(() => {
+      canvas.classList.remove('VideoPlayer-Canvas_fullscreen');
+
       this.player.appendChild(canvas);
       overlay.parentNode.removeChild(overlay);
+      this.dom.overlay = null;
 
       this.typeGrid = true;
       this.hls.currentLevel = 0;

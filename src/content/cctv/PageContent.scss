@@ -12,3 +12,12 @@
     grid-column: 2;
   }
 }
+
+.VideoGrid {
+  &-ButtonClose {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    z-index: 5;
+  }
+}

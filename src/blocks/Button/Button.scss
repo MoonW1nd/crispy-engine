@@ -1,0 +1,27 @@
+.Button {
+  font-size: 1.13rem;
+  border: 0;
+  color: $text-color-primary;
+  height: 40px;
+  background-color: $accent-color;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 200ms opacity linear;
+
+  &:hover,
+  &:active {
+    background-color: $accent-color_dark;
+  }
+
+  b {
+    position: relative;
+    top: 2px;
+    left: 1px;
+  }
+
+  &_hidden {
+    visibility: hidden;
+    height: 0;
+    opacity: 0;
+  }
+}
