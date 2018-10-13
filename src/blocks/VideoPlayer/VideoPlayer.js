@@ -1,6 +1,21 @@
 /* global requestAnimationFrame Hls isNaN document */
 import { getTemplateContent, getBox } from '../_helpers/_helpers';
 
+function brightness(imageData, change) {
+  const pixels = imageData.data;
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    const r = pixels[i];
+    const g = pixels[i + 1];
+    const b = pixels[i + 2];
+
+    pixels[i] = r + change;
+    pixels[i + 1] = g + change;
+    pixels[i + 2] = b + change;
+  }
+  return imageData;
+}
+
 export default class VideoPlayer {
   constructor(options = {}) {
     this.parent = options.parent;
@@ -30,6 +45,7 @@ export default class VideoPlayer {
     this.dom.video = this.parent.querySelector(`.VideoPlayer_id_${this.id} .VideoPlayer-Video`);
     this.dom.canvas = this.parent.querySelector(`.VideoPlayer_id_${this.id} .VideoPlayer-Canvas`);
     this.dom.video.classList.add('VideoPlayer_hidden');
+    this.brightnessFilter = () => {};
     this.initVideo();
     this.initCanvas();
   }
@@ -47,10 +63,21 @@ export default class VideoPlayer {
   loop(context) {
     const loop = () => {
       context.drawImage(this.dom.video, 0, 0);
+      this.brightnessFilter(context);
       requestAnimationFrame(loop);
     };
 
     loop();
+  }
+
+  brightnessChange(value) {
+    this.brightnessFilter = (context) => {
+      const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
+
+      const imageDataFiltered = brightness(imageData, Number(value));
+
+      context.putImageData(imageDataFiltered, 0, 0);
+    };
   }
 
   openFullScreen() {

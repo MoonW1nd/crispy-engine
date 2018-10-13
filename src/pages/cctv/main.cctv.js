@@ -47,5 +47,9 @@ window.addEventListener('load', () => {
     ButtonClose.view.addEventListener('click', () => {
       videoPlayers[`id_${id}`].closeFullScreen();
     });
+
+    RangeControllerLight.dom.input.addEventListener('change', () => {
+      videoPlayers[`id_${id}`].brightnessChange(RangeControllerLight.dom.input.value);
+    });
   });
 });
