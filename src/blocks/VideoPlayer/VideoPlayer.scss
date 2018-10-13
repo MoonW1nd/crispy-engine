@@ -34,9 +34,10 @@
   }
 
   &-Canvas {
+
     &_fullscreen {
+      transition: 300ms all linear;
       position: absolute;
-      transform: initial;
       z-index: 3;
     }
   }
