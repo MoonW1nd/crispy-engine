@@ -72,35 +72,9 @@ export default class VideoPlayer {
     canvas.style.width = `${playerBox.width}px`;
     canvas.style.height = `${playerBox.height}px`;
 
+    canvas.style.left = `${playerBox.left}px`;
+    canvas.style.top = `${playerBox.top}px`;
 
-    // const currentLevel = this.getCorrectQualityLevel(fullScreenAreaBox);
-    // this.hls.currentLevel = currentLevel;
-
-
-    const resolution = this.getVideoAspectRatio();
-    if (resolution <= fullScreenAreaBox.width / fullScreenAreaBox.height) {
-      canvas.style.width = '';
-      const canvasOffsetX = (fullScreenAreaBox.width - fullScreenAreaBox.height * resolution) / 2;
-      setTimeout(() => {
-        canvas.style.height = `${fullScreenAreaBox.height}px`;
-        canvas.style.left = `${canvasOffsetX}px`;
-      }, 0);
-    } else {
-      canvas.style.height = '';
-      const canvasOffsetY = (fullScreenAreaBox.height - (fullScreenAreaBox.width / resolution)) / 2;
-      setTimeout(() => {
-        canvas.style.width = `${fullScreenAreaBox.width}px`;
-        canvas.style.top = `${canvasOffsetY}px`;
-      }, 0);
-    }
-
-    console.log(canvas.style.width);
-
-    // canvas.width = this.hls.levels[currentLevel].width;
-    // canvas.height = this.hls.levels[currentLevel].height;
-
-    this.parent.parentNode.appendChild(canvas);
-    canvas.classList.add('VideoPlayer-Canvas_fullscreen');
     const cloneContext = canvas.getContext('2d');
 
 
@@ -120,12 +94,26 @@ export default class VideoPlayer {
     const transformOriginX = playerRelativeLeft / playerAreaX;
     const transformOriginY = playerRelativeTop / playerAreaY;
 
-    console.log(transformOriginX, transformOriginY);
-
     document.querySelector('body').style.overflow = 'hidden';
 
     clone.style.transformOrigin = `${transformOriginX * 100}% ${transformOriginY * 100}%`;
+    canvas.style.transformOrigin = `${transformOriginX * 100}% ${transformOriginY * 100}%`;
 
+    const resolution = this.getVideoAspectRatio();
+    const canvasOffsetX = (fullScreenAreaBox.width - fullScreenAreaBox.height * resolution) / 2;
+    const canvasOffsetY = (fullScreenAreaBox.height - (fullScreenAreaBox.width / resolution)) / 2;
+
+    if (resolution <= fullScreenAreaBox.width / fullScreenAreaBox.height) {
+      canvas.style.width = '';
+      setTimeout(() => {
+        canvas.style.transform = `scaleY(${fullScreenAreaBox.height / playerBox.height}) scaleX(${(fullScreenAreaBox.height * resolution) / (playerBox.height * resolution)}) translate(${canvasOffsetX / 2}px, 0px)`;
+      }, 0);
+    } else {
+      canvas.style.height = '';
+      setTimeout(() => {
+        canvas.style.transform = `scaleY(${(fullScreenAreaBox.width / resolution) / (playerBox.width / resolution)}) scaleX(${fullScreenAreaBox.width / playerBox.width}) translate(0px, ${canvasOffsetY / 2}px)`;
+      }, 0);
+    }
 
     const scaleRatioX = fullScreenAreaBox.width / playerBox.width;
     const scaleRatioY = fullScreenAreaBox.height / playerBox.height;
@@ -136,7 +124,7 @@ export default class VideoPlayer {
       this.hls.currentLevel = currentLevel;
       canvas.width = this.hls.levels[currentLevel].width;
       canvas.height = this.hls.levels[currentLevel].height;
-    }, 1000);
+    }, 500);
 
 
     clone.addEventListener('click', () => {
