@@ -51,40 +51,29 @@ export default class VideoPlayer {
   }
 
   openFullScreen() {
-    const clone = document.importNode(this.player, true);
-    clone.classList.add('VideoPlayer-Clone');
-    const canvas = this.player.querySelector('.VideoPlayer-Canvas');
-    clone.removeChild(clone.querySelector('.VideoPlayer-Canvas'));
-    const canvasInitialBox = getBox(canvas);
+    const overlay = document.importNode(this.player, false);
+    overlay.classList.add('VideoPlayer-Clone');
+    const { canvas } = this.dom;
     canvas.classList.add('VideoPlayer-Canvas_fullscreen');
     this.parent.parentNode.appendChild(canvas);
-    this.parent.parentNode.appendChild(clone);
+    this.parent.parentNode.appendChild(overlay);
+    this.dom.overlay = overlay;
     this.typeGrid = false;
 
     const playerBox = getBox(this.player);
     const fullScreenAreaBox = getBox(this.parent.parentNode);
 
-    clone.style.width = `${playerBox.width}px`;
-    clone.style.height = `${playerBox.height}px`;
-    clone.style.left = `${playerBox.left}px`;
-    clone.style.top = `${playerBox.top - fullScreenAreaBox.top}px`;
+    overlay.style.width = `${playerBox.width}px`;
+    overlay.style.height = `${playerBox.height}px`;
+    overlay.style.left = `${playerBox.left - fullScreenAreaBox.left}px`;
+    overlay.style.top = `${playerBox.top - fullScreenAreaBox.top}px`;
 
     canvas.style.width = `${playerBox.width}px`;
     canvas.style.height = `${playerBox.height}px`;
+    canvas.style.left = `${playerBox.left - fullScreenAreaBox.left}px`;
+    canvas.style.top = `${playerBox.top - fullScreenAreaBox.top}px`;
 
-    canvas.style.left = `${playerBox.left}px`;
-    canvas.style.top = `${playerBox.top}px`;
-
-    const cloneContext = canvas.getContext('2d');
-
-
-    const loop = () => {
-      cloneContext.drawImage(this.dom.video, 0, 0);
-      requestAnimationFrame(loop);
-    };
-
-    loop();
-
+    // рассчитываем transformOrigin
     const playerRelativeTop = playerBox.top - fullScreenAreaBox.top;
     const playerAreaY = fullScreenAreaBox.height - playerBox.height;
 
@@ -96,20 +85,23 @@ export default class VideoPlayer {
 
     document.querySelector('body').style.overflow = 'hidden';
 
-    clone.style.transformOrigin = `${transformOriginX * 100}% ${transformOriginY * 100}%`;
+    overlay.style.transformOrigin = `${transformOriginX * 100}% ${transformOriginY * 100}%`;
     canvas.style.transformOrigin = `${transformOriginX * 100}% ${transformOriginY * 100}%`;
 
+    // рассчитываем коэффициенты трансформации и устанавливаем их
     const resolution = this.getVideoAspectRatio();
     const canvasOffsetX = (fullScreenAreaBox.width - fullScreenAreaBox.height * resolution) / 2;
     const canvasOffsetY = (fullScreenAreaBox.height - (fullScreenAreaBox.width / resolution)) / 2;
 
     if (resolution <= fullScreenAreaBox.width / fullScreenAreaBox.height) {
       canvas.style.width = '';
+
       setTimeout(() => {
         canvas.style.transform = `scaleY(${fullScreenAreaBox.height / playerBox.height}) scaleX(${(fullScreenAreaBox.height * resolution) / (playerBox.height * resolution)}) translate(${canvasOffsetX / 2}px, 0px)`;
       }, 0);
     } else {
       canvas.style.height = '';
+
       setTimeout(() => {
         canvas.style.transform = `scaleY(${(fullScreenAreaBox.width / resolution) / (playerBox.width / resolution)}) scaleX(${fullScreenAreaBox.width / playerBox.width}) translate(0px, ${canvasOffsetY / 2}px)`;
       }, 0);
@@ -117,8 +109,9 @@ export default class VideoPlayer {
 
     const scaleRatioX = fullScreenAreaBox.width / playerBox.width;
     const scaleRatioY = fullScreenAreaBox.height / playerBox.height;
-    clone.style.transform = `scaleX(${scaleRatioX * 1}) scaleY(${scaleRatioY * 1})`;
+    overlay.style.transform = `scaleX(${scaleRatioX * 1.1}) scaleY(${scaleRatioY * 1.1})`;
 
+    // установка качества видео
     setTimeout(() => {
       const currentLevel = this.getCorrectQualityLevel(fullScreenAreaBox);
       this.hls.currentLevel = currentLevel;
@@ -127,15 +120,52 @@ export default class VideoPlayer {
     }, 500);
 
 
-    clone.addEventListener('click', () => {
-      clone.style.transform = 'scale(1)';
-      canvas.style.width = `${canvasInitialBox.width}px`;
-      canvas.style.height = `${canvasInitialBox.height}px`;
+    overlay.addEventListener('click', () => {
+      overlay.style.transform = 'scale(1)';
+      canvas.style.transform = 'scale(1) translate(0px, 0px)';
       setTimeout(() => {
-        canvas.parentNode.removeChild(canvas);
-        clone.parentNode.removeChild(clone);
+        this.player.appendChild(canvas);
+        overlay.parentNode.removeChild(overlay);
+        canvas.style.width = '';
+        canvas.style.height = '';
+        canvas.style.transform = '';
+        canvas.style.transformOrigin = '';
+        canvas.style.left = 0;
+        canvas.style.top = 0;
+        this.typeGrid = true;
+        this.hls.currentLevel = 0;
+        canvas.width = this.hls.levels[0].width;
+        canvas.height = this.hls.levels[0].height;
       }, 300);
     });
+  }
+
+  closeFullScreen() {
+    const { overlay, canvas } = this;
+
+    if (overlay == null) {
+      throw Error('Прежде чем вызывать метод closeFullScreen сначала нужно открыть видео в fullScreen режиме');
+    }
+
+    overlay.style.transform = 'scale(1)';
+    canvas.style.transform = 'scale(1) translate(0px, 0px)';
+
+    setTimeout(() => {
+      this.player.appendChild(canvas);
+      overlay.parentNode.removeChild(overlay);
+
+      this.typeGrid = true;
+      this.hls.currentLevel = 0;
+
+      canvas.style.width = '';
+      canvas.style.height = '';
+      canvas.style.transform = '';
+      canvas.style.transformOrigin = '';
+      canvas.style.left = 0;
+      canvas.style.top = 0;
+      canvas.width = this.hls.levels[0].width;
+      canvas.height = this.hls.levels[0].height;
+    }, 300);
   }
 
   initVideo() {
