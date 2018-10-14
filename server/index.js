@@ -5,4 +5,9 @@ const app = express();
 const port = 8000;
 
 app.use('/', routes);
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+app.use((req, res) => {
+  res.status(404).send('<h1>Page not found</h1>');
+});
+
+app.listen(port, () => console.log(`App listening on port ${port}!`));
