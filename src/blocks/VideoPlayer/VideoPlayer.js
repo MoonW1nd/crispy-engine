@@ -54,6 +54,7 @@ export default class VideoPlayer {
 
   loop(context) {
     const loop = () => {
+      context.fillRect(0, 0, this.dom.canvas.width, this.dom.canvas.height);
       context.drawImage(this.dom.video, 0, 0);
       this.brightnessFilter(context);
       this.contrastFilter(context);
@@ -213,11 +214,20 @@ export default class VideoPlayer {
     const { video } = this.dom;
 
     if (Hls.isSupported()) {
-      const hls = new Hls({ capLevelToPlayerSize: true });
+      const hls = new Hls({
+        capLevelToPlayerSize: true,
+        maxBufferLength: 200,
+        maxMaxBufferLength: 100,
+        maxBufferSize: 200 * 1000 * 1000,
+        maxBufferHole: 0.1,
+        highBufferWatchdogPeriod: 0.1,
+      });
       hls.loadSource(this.url);
       hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play();
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play();
+        });
       });
 
       this.hls = hls;
@@ -236,6 +246,26 @@ export default class VideoPlayer {
 
         this.dom.canvas.width = this.hls.levels[this.currentLevel].width;
         this.dom.canvas.height = this.hls.levels[this.currentLevel].height;
+      });
+
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        const errorType = data.type;
+        const errorFatal = data.fatal;
+        if (errorFatal) {
+          switch (errorType) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.log('fatal network error encountered, try to recover');
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log('fatal media error encountered, try to recover');
+              hls.recoverMediaError();
+              break;
+            default:
+              hls.destroy();
+              break;
+          }
+        }
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8';

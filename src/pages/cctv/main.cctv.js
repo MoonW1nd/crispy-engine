@@ -8,11 +8,12 @@ import AudioAnalyser from '../../blocks/AudioAnalyser/AudioAnalyser';
 window.addEventListener('load', () => {
   const videoGrid = document.querySelector('.PageContent-VideoGrid');
   const videoPlayers = {};
+  const localIP = '192.168.0.186';
   const videoLinks = [
-    'http://192.168.0.186:9191/master?url=http%3A%2F%2F192.168.0.186%3A3102%2Fstreams%2Fsosed%2Fmaster.m3u8',
-    'http://192.168.0.186:9191/master?url=http%3A%2F%2F192.168.0.186%3A3102%2Fstreams%2Fcat%2Fmaster.m3u8',
-    'http://192.168.0.186:9191/master?url=http%3A%2F%2F192.168.0.186%3A3102%2Fstreams%2Fdog%2Fmaster.m3u8',
-    'http://192.168.0.186:9191/master?url=http%3A%2F%2F192.168.0.186%3A3102%2Fstreams%2Fhall%2Fmaster.m3u8',
+    `http://${localIP}:9191/master?url=http%3A%2F%2F${localIP}%3A3102%2Fstreams%2Fsosed%2Fmaster.m3u8`,
+    `http://${localIP}:9191/master?url=http%3A%2F%2F${localIP}%3A3102%2Fstreams%2Fcat%2Fmaster.m3u8`,
+    `http://${localIP}:9191/master?url=http%3A%2F%2F${localIP}%3A3102%2Fstreams%2Fdog%2Fmaster.m3u8`,
+    `http://${localIP}:9191/master?url=http%3A%2F%2F${localIP}%3A3102%2Fstreams%2Fhall%2Fmaster.m3u8`,
   ];
 
   const ButtonClose = new Button({
