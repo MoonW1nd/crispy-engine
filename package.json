@@ -53,12 +53,15 @@
     "gulp-uglify": "^3.0.0",
     "husky": "^1.1.0",
     "lint-staged": "^7.3.0",
+    "nodemon": "^1.18.4",
     "posthtml-include": "^1.2.0",
     "stylelint": "^9.6.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.16.4"
+  },
   "lint-staged": {
     "*.js": [
       "eslint --fix",
