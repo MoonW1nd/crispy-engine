@@ -60,6 +60,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4"
   },
   "lint-staged": {

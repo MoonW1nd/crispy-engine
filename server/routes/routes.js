@@ -5,7 +5,7 @@ const storeController = require('../controllers/store.controller');
 const router = express.Router();
 
 router.get('/', (req, res) => res.send('Hello World!'));
-router.post('/status', serverInfo.status);
+router.get('/status', serverInfo.status);
 router.post('/api/events', storeController.events);
 
 module.exports = router;

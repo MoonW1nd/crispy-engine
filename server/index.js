@@ -1,9 +1,13 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const routes = require('./routes/routes');
 const errorHandlers = require('./handlers/errorHandlers');
 
 const app = express();
 const port = 8000;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', routes);
 

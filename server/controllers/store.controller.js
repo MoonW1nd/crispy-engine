@@ -14,9 +14,8 @@ exports.events = (req, res) => {
   let page;
 
   switch (true) {
-    case 'type' in req.query:
-      resultData = data.events.filter(event => event.type && event.type === req.query.type);
-      res.setHeader('Content-Type', 'application/json');
+    case 'type' in req.body:
+      resultData = data.events.filter(event => event.type && event.type === req.body.type);
       if (resultData.length > 0) {
         res.json(resultData);
       } else {
@@ -24,8 +23,8 @@ exports.events = (req, res) => {
       }
       break;
 
-    case 'amount' in req.query && 'page' in req.query:
-      ({ amount, page } = req.query);
+    case 'amount' in req.body && 'page' in req.body:
+      ({ amount, page } = req.body);
       if (!isCorrectNumberParam(amount)) res.status(400).send('incorrect amount');
       if (!isCorrectNumberParam(page)) res.status(400).send('incorrect page');
 
@@ -37,8 +36,8 @@ exports.events = (req, res) => {
       res.json(resultData);
       break;
 
-    case 'amount' in req.query:
-      ({ amount } = req.query);
+    case 'amount' in req.body:
+      ({ amount } = req.body);
       if (!isCorrectNumberParam(amount)) res.status(400).send('incorrect amount');
       amount = parseInt(amount, 10);
 
