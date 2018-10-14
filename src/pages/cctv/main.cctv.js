@@ -22,6 +22,13 @@ window.addEventListener('load', () => {
     modifier: 'VideoGrid-ButtonClose',
   });
 
+  const ButtonPlay = new Button({
+    content: 'вкл. видео',
+    parent: videoGrid,
+    modifier: 'VideoGrid-ButtonPlay',
+  });
+
+
   const RangeControllerLight = new RangeController({
     parent: videoGrid,
     modifier: 'VideoGrid-LightController',
@@ -42,6 +49,7 @@ window.addEventListener('load', () => {
       parent: videoGrid,
       url,
       button: ButtonClose,
+      buttonPlay: ButtonPlay,
       lightController: RangeControllerLight,
       contrastController: RangeControllerContrast,
     });

@@ -8,6 +8,7 @@ export default class VideoPlayer {
     this.parent = options.parent;
     this.url = options.url;
     this.button = options.button;
+    this.buttonPlay = options.buttonPlay;
     this.lightController = options.lightController;
     this.contrastController = options.contrastController;
     this.audioAnalyser = options.audioAnalyser;
@@ -102,6 +103,7 @@ export default class VideoPlayer {
     this.parent.parentNode.appendChild(overlay);
     this.dom.overlay = overlay;
     this.typeGrid = false;
+    this.dom.video.play();
 
     const playerBox = getBox(this.player);
     const fullScreenAreaBox = getBox(this.parent.parentNode);
@@ -217,6 +219,17 @@ export default class VideoPlayer {
       canvas.width = this.hls.levels[0].width;
       canvas.height = this.hls.levels[0].height;
       this.isFullScreen = false;
+
+      const DEFAULT_ASPECT_RATIO = 1.75;
+      const resolution = this.getVideoAspectRatio();
+
+      if (resolution >= DEFAULT_ASPECT_RATIO && this.typeGrid) {
+        this.dom.canvas.style.height = '100%';
+      } else if (this.typeGrid) {
+        this.dom.canvas.style.width = '100%';
+      }
+
+      this.dom.video.play();
     }, 300);
   }
 
@@ -233,11 +246,16 @@ export default class VideoPlayer {
         highBufferWatchdogPeriod: 0.1,
       });
       hls.loadSource(this.url);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          video.play();
-        });
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        hls.attachMedia(video);
+        video.play()
+          .catch(() => {
+            this.buttonPlay.show();
+            this.buttonPlay.view.addEventListener('click', () => {
+              video.play();
+              this.buttonPlay.hide();
+            });
+          });
       });
 
       this.hls = hls;

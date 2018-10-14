@@ -11,3 +11,10 @@
     opacity: 0;
   }
 }
+
+@media (max-width: 650px) {
+  .AudioAnalyser {
+    right: 30px;
+    bottom: 120px;
+  }
+}

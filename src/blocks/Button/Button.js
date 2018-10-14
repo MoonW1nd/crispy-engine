@@ -8,6 +8,11 @@ export default class Button {
     this.visible = options.visible;
     this.modifier = options.modifier;
 
+    this.id = typeof Button.id === 'number' && !Number.isNaN(Button.id)
+      ? Button.id + 1
+      : 0;
+
+    Button.id = this.id;
     if (this.parent != null) this.render();
   }
 
@@ -20,17 +25,19 @@ export default class Button {
     templateButton.innerHTML = this.content;
 
     const clone = document.importNode(templateContent, true);
+    const button = clone.querySelector('.Button');
+    button.classList.add(`Button_id_${this.id}`);
 
     if (!this.visible) {
-      clone.querySelector('.Button').classList.add('Button_hidden');
+      button.classList.add('Button_hidden');
     }
 
     if (this.modifier) {
-      clone.querySelector('.Button').classList.add(this.modifier);
+      button.classList.add(this.modifier);
     }
 
     parent.appendChild(clone);
-    this.view = parent.querySelector('.Button');
+    this.view = parent.querySelector(`.Button_id_${this.id}`);
   }
 
   show() {
