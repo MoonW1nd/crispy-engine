@@ -10,7 +10,6 @@ exports.status = (req, res) => {
   if (hours < 10) { hours = `0${hours}`; }
   if (minutes < 10) { minutes = `0${minutes}`; }
   if (seconds < 10) { seconds = `0${seconds}`; }
-
   time = `${hours}:${minutes}:${seconds}`;
 
   res.send(`time: ${time}`);
