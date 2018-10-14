@@ -1,4 +1,3 @@
-/* global Math */
 function getColorValue(value) {
   if (value > 255) {
     return 255;
@@ -8,7 +7,7 @@ function getColorValue(value) {
   return value;
 }
 
-export function contrast(imageData, change) {
+export default function contrast(imageData, change) {
   const pixels = imageData.data;
 
   const contrastValue = ((100 + change) / 100) ** 2;
@@ -27,25 +26,3 @@ export function contrast(imageData, change) {
   }
   return imageData;
 }
-
-export function brightness(imageData, change) {
-  const pixels = imageData.data;
-
-  for (let i = 0; i < pixels.length; i += 4) {
-    const r = pixels[i];
-    const g = pixels[i + 1];
-    const b = pixels[i + 2];
-
-    pixels[i] = r + change;
-    pixels[i + 1] = g + change;
-    pixels[i + 2] = b + change;
-  }
-  return imageData;
-}
-
-const filters = {
-  brightness,
-  contrast,
-};
-
-export default filters;

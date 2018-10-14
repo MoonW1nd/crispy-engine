@@ -1,6 +1,7 @@
 /* global requestAnimationFrame Hls isNaN document */
 import { getTemplateContent, getBox } from '../_helpers/_helpers';
-import { brightness, contrast } from './filters/VideoPlayer.filters';
+import brightness from './filters/brightness.filter';
+import contrast from './filters/contrast.filter';
 
 export default class VideoPlayer {
   constructor(options = {}) {
@@ -163,6 +164,7 @@ export default class VideoPlayer {
       this.lightController.show();
       this.contrastController.show();
       this.isFullScreen = true;
+      this.dom.video.muted = false;
     }, 500);
   }
 
@@ -176,6 +178,7 @@ export default class VideoPlayer {
     this.button.hide();
     this.lightController.hide();
     this.contrastController.hide();
+    this.dom.video.muted = true;
     overlay.style.transform = 'scale(1)';
     canvas.style.transform = 'scale(1) translate(0px, 0px)';
 
