@@ -123,32 +123,42 @@ export default class VideoPlayer {
     const playerRelativeLeft = playerBox.left - fullScreenAreaBox.left;
     const playerAreaX = fullScreenAreaBox.width - playerBox.width;
 
-    const transformOriginX = playerRelativeLeft / playerAreaX;
-    const transformOriginY = playerRelativeTop / playerAreaY;
+    const transformOriginX = (playerRelativeLeft / playerAreaX) * 100;
+    const transformOriginY = (playerRelativeTop / playerAreaY) * 100;
 
     document.querySelector('body').style.overflow = 'hidden';
 
-    overlay.style.transformOrigin = `${transformOriginX * 100}% ${transformOriginY * 100}%`;
-    canvas.style.transformOrigin = `${transformOriginX * 100}% ${transformOriginY * 100}%`;
+    overlay.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
+    // canvas.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
 
     // рассчитываем коэффициенты трансформации и устанавливаем их
     const resolution = this.getVideoAspectRatio();
-    const canvasOffsetX = (fullScreenAreaBox.width - fullScreenAreaBox.height * resolution) / 2;
-    const canvasOffsetY = (fullScreenAreaBox.height - (fullScreenAreaBox.width / resolution)) / 2;
+    let scaleX;
+    let scaleY;
 
     if (resolution <= fullScreenAreaBox.width / fullScreenAreaBox.height) {
       canvas.style.width = '';
-
-      setTimeout(() => {
-        canvas.style.transform = `scaleY(${fullScreenAreaBox.height / playerBox.height}) scaleX(${(fullScreenAreaBox.height * resolution) / (playerBox.height * resolution)}) translate(${canvasOffsetX / 2}px, 0px)`;
-      }, 0);
+      scaleX = (fullScreenAreaBox.height * resolution) / (playerBox.height * resolution);
+      scaleY = fullScreenAreaBox.height / playerBox.height;
     } else {
       canvas.style.height = '';
-
-      setTimeout(() => {
-        canvas.style.transform = `scaleY(${(fullScreenAreaBox.width / resolution) / (playerBox.width / resolution)}) scaleX(${fullScreenAreaBox.width / playerBox.width}) translate(0px, ${canvasOffsetY / 2}px)`;
-      }, 0);
+      scaleX = fullScreenAreaBox.width / playerBox.width;
+      scaleY = (fullScreenAreaBox.width / resolution) / (playerBox.width / resolution);
     }
+
+    const cloneCanvas = this.dom.canvas.cloneNode();
+    cloneCanvas.style.transform = `scaleY(${scaleY}) scaleX(${scaleX}) translate(0px, 0px)`;
+    this.parent.appendChild(cloneCanvas);
+    const cloneBox = cloneCanvas.getBoundingClientRect();
+    cloneCanvas.parentNode.removeChild(cloneCanvas);
+
+    const canvasOffsetY = ((-cloneBox.top + fullScreenAreaBox.top) / scaleY)
+      + ((fullScreenAreaBox.height - cloneBox.height) / scaleY / 2);
+    const canvasOffsetX = ((-cloneBox.left + fullScreenAreaBox.left) / scaleX)
+      + ((fullScreenAreaBox.width - cloneBox.width) / scaleX / 2);
+    setTimeout(() => {
+      canvas.style.transform = `scaleY(${scaleY}) scaleX(${scaleX}) translate(${canvasOffsetX}px, ${canvasOffsetY}px)`;
+    }, 0);
 
     const scaleRatioX = fullScreenAreaBox.width / playerBox.width;
     const scaleRatioY = fullScreenAreaBox.height / playerBox.height;
@@ -292,8 +302,8 @@ export default class VideoPlayer {
       previousWidth = level.width;
       previousHeight = level.height;
     });
-
-    return heightLevel <= widthLevel ? heightLevel - 1 : widthLevel - 1;
+    const currentLevel = heightLevel <= widthLevel ? heightLevel - 1 : widthLevel - 1;
+    return currentLevel <= 0 ? 0 : currentLevel;
   }
 
   getVideoAspectRatio() {

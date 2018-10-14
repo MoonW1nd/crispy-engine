@@ -1,6 +1,6 @@
 @mixin rangeTrack($background-image) {
   appearance: none;
-  width: 20vw;
+  width: 100px;
   height: 10px;
   background-image: $background-image;
   border-radius: 30px;
