@@ -1,20 +1,6 @@
 /* global requestAnimationFrame Hls isNaN document */
 import { getTemplateContent, getBox } from '../_helpers/_helpers';
-
-function brightness(imageData, change) {
-  const pixels = imageData.data;
-
-  for (let i = 0; i < pixels.length; i += 4) {
-    const r = pixels[i];
-    const g = pixels[i + 1];
-    const b = pixels[i + 2];
-
-    pixels[i] = r + change;
-    pixels[i + 1] = g + change;
-    pixels[i + 2] = b + change;
-  }
-  return imageData;
-}
+import { brightness, contrast } from './filters/VideoPlayer.filters';
 
 export default class VideoPlayer {
   constructor(options = {}) {
@@ -31,7 +17,10 @@ export default class VideoPlayer {
       : 0;
     VideoPlayer.id = this.id;
     this.isFullScreen = false;
+    this.brightnessFilter = () => {};
+    this.contrastFilter = () => {};
     this.brightness = 0;
+    this.contrast = 0;
     this.render();
   }
 
@@ -53,8 +42,6 @@ export default class VideoPlayer {
   }
 
   initCanvas() {
-    // this.dom.video.width = this.dom.video.offsetWidth;
-    // this.dom.video.width = this.dom.video.offsetWidth;
     this.dom.canvas.width = this.dom.video.offsetWidth;
     this.dom.canvas.height = this.dom.video.offsetHeight;
 
@@ -66,6 +53,7 @@ export default class VideoPlayer {
     const loop = () => {
       context.drawImage(this.dom.video, 0, 0);
       this.brightnessFilter(context);
+      this.contrastFilter(context);
       requestAnimationFrame(loop);
     };
 
@@ -75,10 +63,25 @@ export default class VideoPlayer {
   brightnessChange(value) {
     if (this.isFullScreen) {
       this.brightness = value;
+
       this.brightnessFilter = (context) => {
         const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
 
         const imageDataFiltered = brightness(imageData, Number(value));
+
+        context.putImageData(imageDataFiltered, 0, 0);
+      };
+    }
+  }
+
+  contrastChange(value) {
+    if (this.isFullScreen) {
+      this.contrast = value;
+
+      this.contrastFilter = (context) => {
+        const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
+
+        const imageDataFiltered = contrast(imageData, Number(value));
 
         context.putImageData(imageDataFiltered, 0, 0);
       };
@@ -154,6 +157,7 @@ export default class VideoPlayer {
       canvas.height = this.hls.levels[currentLevel].height;
 
       this.lightController.dom.input.value = this.brightness;
+      this.contrastController.dom.input.value = this.contrast;
 
       this.button.show();
       this.lightController.show();

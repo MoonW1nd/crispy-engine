@@ -23,7 +23,7 @@ window.addEventListener('load', () => {
   const RangeControllerLight = new RangeController({
     parent: videoGrid,
     modifier: 'VideoGrid-LightController',
-    rangeMin: 0,
+    rangeMin: -200,
     rangeMax: 200,
   });
 
@@ -31,6 +31,8 @@ window.addEventListener('load', () => {
     parent: videoGrid,
     modifier: 'VideoGrid-ContrastController',
     type: 'contrast',
+    rangeMin: 0,
+    rangeMax: 100,
   });
 
   videoLinks.forEach((url, id) => {
@@ -52,6 +54,10 @@ window.addEventListener('load', () => {
 
     RangeControllerLight.dom.input.addEventListener('change', () => {
       videoPlayers[`id_${id}`].brightnessChange(RangeControllerLight.dom.input.value);
+    });
+
+    RangeControllerContrast.dom.input.addEventListener('change', () => {
+      videoPlayers[`id_${id}`].contrastChange(RangeControllerContrast.dom.input.value);
     });
   });
 });
