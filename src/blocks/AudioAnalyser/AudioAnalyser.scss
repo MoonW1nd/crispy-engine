@@ -1,0 +1,13 @@
+.AudioAnalyser {
+  position: absolute;
+  bottom: 30px;
+  right: 180px;
+  z-index: 10;
+  opacity: 1;
+  transition: 200ms opacity linear;
+
+  &_hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+}

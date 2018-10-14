@@ -10,6 +10,7 @@ export default class VideoPlayer {
     this.button = options.button;
     this.lightController = options.lightController;
     this.contrastController = options.contrastController;
+    this.audioAnalyser = options.audioAnalyser;
     this.setIntervalIndex = null;
     this.dom = {};
     this.typeGrid = true;
@@ -20,6 +21,7 @@ export default class VideoPlayer {
     this.isFullScreen = false;
     this.brightnessFilter = () => {};
     this.contrastFilter = () => {};
+    this.analyserFunction = () => {};
     this.brightness = 0;
     this.contrast = 0;
     this.render();
@@ -55,6 +57,7 @@ export default class VideoPlayer {
       context.drawImage(this.dom.video, 0, 0);
       this.brightnessFilter(context);
       this.contrastFilter(context);
+      this.analyserFunction();
       requestAnimationFrame(loop);
     };
 
@@ -163,6 +166,7 @@ export default class VideoPlayer {
       this.button.show();
       this.lightController.show();
       this.contrastController.show();
+      this.audioAnalyser.show();
       this.isFullScreen = true;
       this.dom.video.muted = false;
     }, 500);
@@ -178,6 +182,7 @@ export default class VideoPlayer {
     this.button.hide();
     this.lightController.hide();
     this.contrastController.hide();
+    this.audioAnalyser.hide();
     this.dom.video.muted = true;
     overlay.style.transform = 'scale(1)';
     canvas.style.transform = 'scale(1) translate(0px, 0px)';

@@ -23,6 +23,7 @@
 
 .RangeController {
   transition: 200ms opacity linear;
+  opacity: 1;
 
   &-Scale {
     &::-webkit-slider-thumb {

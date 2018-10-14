@@ -8,8 +8,9 @@ export default class AudioAnalyser {
     this.visible = options.visible;
     this.modifier = options.modifier;
     this.video = options.video;
-    this.width = options.width || 200;
-    this.height = options.height || 200;
+    this.width = options.width || 140;
+    this.height = options.height || 80;
+    this.data = [];
 
     this.id = typeof AudioAnalyser.id === 'number' && !Number.isNaN(AudioAnalyser.id)
       ? AudioAnalyser.id + 1
@@ -48,6 +49,8 @@ export default class AudioAnalyser {
     this.canvas = this.view;
 
     this.canvasContext = this.canvas.getContext('2d');
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
   }
 
   init() {
@@ -58,7 +61,7 @@ export default class AudioAnalyser {
       this.node = this.audioContext.createScriptProcessor(2048, 1, 1);
       this.analyser = this.audioContext.createAnalyser();
       this.analyser.smoothingTimeConstant = 0.3;
-      this.analyser.fftSize = 512;
+      this.analyser.fftSize = 256;
       this.bands = new Uint8Array(this.analyser.frequencyBinCount);
     } else {
       console.warn('Ваш браузер не поддерживает Web Audio API'); //eslint-disable-line
@@ -76,14 +79,43 @@ export default class AudioAnalyser {
 
       this.node.onaudioprocess = () => {
         this.analyser.getByteFrequencyData(this.bands);
-        if (this.video.paused) {
-          if (typeof this.update === 'function') {
-            this.update(this.bands);
-          }
-        }
+        this.data = this.bands;
       };
     });
 
     return this;
+  }
+
+  draw(dataArray) {
+    const WIDTH = this.width;
+    const HEIGHT = this.height;
+    const bufferLength = this.analyser.fftSize;
+
+    this.canvasContext.fillRect(0, 0, WIDTH, HEIGHT);
+
+    this.canvasContext.lineWidth = 2;
+    this.canvasContext.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    this.canvasContext.fillRect(0, 0, WIDTH, HEIGHT);
+
+    const barWidth = (WIDTH / bufferLength) * 2.5;
+    let barHeight;
+    let x = 0;
+
+    for (let i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+
+      this.canvasContext.fillStyle = 'rgba(255, 217, 62, 1)';
+      this.canvasContext.fillRect(x, HEIGHT - barHeight / 4, barWidth, barHeight / 4);
+
+      x += barWidth + 1;
+    }
+  }
+
+  show() {
+    this.view.classList.remove('AudioAnalyser_hidden');
+  }
+
+  hide() {
+    this.view.classList.add('AudioAnalyser_hidden');
   }
 }

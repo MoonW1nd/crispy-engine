@@ -60,16 +60,15 @@ window.addEventListener('load', () => {
     RangeControllerContrast.dom.input.addEventListener('change', () => {
       videoPlayers[`id_${id}`].contrastChange(RangeControllerContrast.dom.input.value);
     });
-  });
 
-  const AA = new AudioAnalyser({
-    parent: videoGrid,
-    video: videoPlayers.id_1.dom.video,
-  });
+    const analyser = new AudioAnalyser({
+      parent: videoGrid,
+      video: videoPlayers[`id_${id}`].dom.video,
+    });
 
-  AA.update = () => {
-    if (videoPlayers.id_1.isFullScreen) {
-      // some code
-    }
-  };
+    videoPlayers[`id_${id}`].audioAnalyser = analyser;
+    videoPlayers[`id_${id}`].analyserFunction = () => {
+      analyser.draw(analyser.data);
+    };
+  });
 });
