@@ -30,6 +30,8 @@ export default class VideoPlayer {
       ? VideoPlayer.id + 1
       : 0;
     VideoPlayer.id = this.id;
+    this.isFullScreen = false;
+    this.brightness = 0;
     this.render();
   }
 
@@ -71,13 +73,16 @@ export default class VideoPlayer {
   }
 
   brightnessChange(value) {
-    this.brightnessFilter = (context) => {
-      const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
+    if (this.isFullScreen) {
+      this.brightness = value;
+      this.brightnessFilter = (context) => {
+        const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
 
-      const imageDataFiltered = brightness(imageData, Number(value));
+        const imageDataFiltered = brightness(imageData, Number(value));
 
-      context.putImageData(imageDataFiltered, 0, 0);
-    };
+        context.putImageData(imageDataFiltered, 0, 0);
+      };
+    }
   }
 
   openFullScreen() {
@@ -147,9 +152,13 @@ export default class VideoPlayer {
       this.hls.currentLevel = currentLevel;
       canvas.width = this.hls.levels[currentLevel].width;
       canvas.height = this.hls.levels[currentLevel].height;
+
+      this.lightController.dom.input.value = this.brightness;
+
       this.button.show();
       this.lightController.show();
       this.contrastController.show();
+      this.isFullScreen = true;
     }, 500);
   }
 
@@ -184,6 +193,7 @@ export default class VideoPlayer {
       canvas.style.top = 0;
       canvas.width = this.hls.levels[0].width;
       canvas.height = this.hls.levels[0].height;
+      this.isFullScreen = false;
     }, 300);
   }
 

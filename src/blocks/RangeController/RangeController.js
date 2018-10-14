@@ -7,6 +7,8 @@ export default class RangeController {
     this.type = options.type ? options.type : 'sun';
     this.modifier = options.modifier;
     this.visible = options.visible;
+    this.rangeMin = options.rangeMin || 0;
+    this.rangeMax = options.rangeMax || 100;
 
     this.id = typeof RangeController.id === 'number' && !Number.isNaN(RangeController.id)
       ? RangeController.id + 1
@@ -42,6 +44,9 @@ export default class RangeController {
     this.dom = {
       input: this.view.querySelector('.RangeController-Scale'),
     };
+
+    this.dom.input.setAttribute('min', this.rangeMin);
+    this.dom.input.setAttribute('max', this.rangeMax);
   }
 
   show() {

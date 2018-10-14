@@ -23,6 +23,8 @@ window.addEventListener('load', () => {
   const RangeControllerLight = new RangeController({
     parent: videoGrid,
     modifier: 'VideoGrid-LightController',
+    rangeMin: 0,
+    rangeMax: 200,
   });
 
   const RangeControllerContrast = new RangeController({
