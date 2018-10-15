@@ -276,6 +276,7 @@ export default class VideoPlayer {
         this.dom.canvas.height = this.hls.levels[this.currentLevel].height;
       });
 
+      // Обработка критических ошибок
       hls.on(Hls.Events.ERROR, (event, data) => {
         const errorType = data.type;
         const errorFatal = data.fatal;
@@ -298,7 +299,14 @@ export default class VideoPlayer {
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8';
       video.addEventListener('loadedmetadata', () => {
-        video.play();
+        video.play()
+          .catch(() => {
+            this.buttonPlay.show();
+            this.buttonPlay.view.addEventListener('click', () => {
+              video.play();
+              this.buttonPlay.hide();
+            });
+          });
       });
     }
   }
