@@ -1,0 +1,72 @@
+.PageContent {
+  width: 100%;
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto minmax(100px, calc((100vh - 160px) * 1.75)) auto;
+  grid-template-rows: 1fr;
+  position: relative;
+
+  &-VideoGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column: 2;
+  }
+}
+
+.VideoGrid {
+  &-ButtonClose {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    z-index: 5;
+  }
+
+  &-ButtonPlay {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    z-index: 5;
+  }
+
+  &-LightController,
+  &-ContrastController {
+    position: absolute;
+    z-index: 5;
+  }
+
+  &-LightController {
+    bottom: 44px;
+    left: 30px;
+  }
+
+  &-ContrastController {
+    bottom: 44px;
+    left: 270px;
+  }
+}
+
+@media (max-width: 650px) {
+  .PageContent {
+    padding: 50px 25px 0;
+    box-sizing: border-box;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+
+    &-VideoGrid {
+      grid-template-columns: 1fr;
+      grid-column: auto;
+    }
+  }
+
+  .VideoGrid {
+    &-LightController {
+      bottom: 44px;
+      left: 30px;
+    }
+
+    &-ContrastController {
+      bottom: 120px;
+      left: 30px;
+    }
+  }
+}

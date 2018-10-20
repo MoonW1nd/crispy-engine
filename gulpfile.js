@@ -11,7 +11,6 @@ const rename = require('gulp-rename');
 const clean = require('gulp-clean');
 const minifyHTML = require('gulp-htmlnano');
 const environments = require('gulp-environments');
-const concat = require('gulp-concat');
 const removeEmptyLines = require('gulp-remove-empty-lines');
 const browserify = require('browserify');
 const postHTML = require('gulp-posthtml');
@@ -41,13 +40,13 @@ const babelOptions = {
 
 function styles() {
   return gulp
-    .src(['./src/**/*.scss'])
+    .src(['./src/**/main*.scss'])
     .pipe(plumber())
-    .pipe(concat('main.scss'))
     .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
     .pipe(rename({
       suffix: '.min',
+      dirname: '',
     }))
     .pipe(production(csso({ restructure: false })))
     .pipe(development(csso({
@@ -64,15 +63,23 @@ const options = {};
 const plugins = [require('posthtml-include')({ root: `${path}` })]; // eslint-disable-line
 
 function html() {
-  return gulp
+  gulp
     .src(['src/*.html'])
     .pipe(plumber())
     .pipe(postHTML(plugins, options))
     .pipe(minifyHTML())
     .pipe(gulp.dest('build'));
+
+  return gulp
+    .src(['src/pages/**/*.html'])
+    .pipe(plumber())
+    .pipe(postHTML(plugins, options))
+    .pipe(rename({ dirname: '' }))
+    .pipe(minifyHTML())
+    .pipe(gulp.dest('build/pages'));
 }
 
-function validateHTML() {
+function validateHTML() { //eslint-disable-line
   return gulp
     .src(['src/*.html'])
     .pipe(plumber())
@@ -82,23 +89,32 @@ function validateHTML() {
     .pipe(gulp.dest('build'));
 }
 
-function javaScript() {
-  const bundleStream = browserify('src/main.js')
+
+function createJavaScripBundle(sourceFolder, sourceFileName, dest) {
+  const bundleStream = browserify(`${sourceFolder}/${sourceFileName}`)
     .transform('babelify', babelOptions)
     .bundle();
 
   return bundleStream
-    .pipe(source('main.js'))
+    .pipe(source(sourceFileName))
     .pipe(buffer())
     .pipe(plumber())
     .pipe(rename({ suffix: '.min' }))
     .pipe(production(uglify()))
-    .pipe(gulp.dest('build/js'));
+    .pipe(gulp.dest(dest));
 }
+
+
+function javaScript() {
+  createJavaScripBundle('src', 'main.js', 'build/js');
+  return createJavaScripBundle('src/pages/cctv', 'main.cctv.js', 'build/js');
+}
+
 
 function cleanBuild() {
   return gulp.src(['build'], { read: false, allowEmpty: true }).pipe(clean({ force: true }));
 }
+
 
 function serve() {
   browserSync.init({
@@ -123,12 +139,15 @@ function watch() {
   gulp.watch('src/**/*.html', html).on('change', browserSync.reload);
 }
 
+
 const build = production()
   ? gulp.series(cleanBuild, gulp.parallel(styles, html, assets, javaScript))
   : gulp.series(
+    cleanBuild,
     gulp.parallel(styles, html, assets, javaScript),
     gulp.parallel(watch, serve),
   );
+
 
 const taskValidateHTML = gulp.series(
   cleanBuild,

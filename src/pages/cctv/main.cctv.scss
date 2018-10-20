@@ -1,0 +1,22 @@
+@import 'src/common.scss';
+@import 'src/blocks/Header/Header.scss';
+@import 'src/blocks/Footer/Footer.scss';
+@import 'src/blocks/Button/Button.scss';
+@import 'src/blocks/RangeController/RangeController.scss';
+@import 'src/blocks/VideoPlayer/VideoPlayer.scss';
+@import 'src/blocks/AudioAnalyser/AudioAnalyser.scss';
+@import 'src/content/cctv/PageContent.scss';
+
+.Footer,
+.Header {
+  background-color: #ffffff;
+  z-index: 5;
+}
+
+.Footer {
+  margin: 0;
+}
+
+body {
+  max-height: 100%;
+}

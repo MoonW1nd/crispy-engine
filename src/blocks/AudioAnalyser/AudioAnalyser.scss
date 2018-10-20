@@ -1,0 +1,20 @@
+.AudioAnalyser {
+  position: absolute;
+  bottom: 30px;
+  right: 180px;
+  z-index: 10;
+  opacity: 1;
+  transition: 200ms opacity linear;
+
+  &_hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@media (max-width: 650px) {
+  .AudioAnalyser {
+    right: 30px;
+    bottom: 120px;
+  }
+}

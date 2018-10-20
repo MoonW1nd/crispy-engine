@@ -18,6 +18,17 @@ export function getImageHtml(nameImage, extension, className, alt = null) {
   return `<img src="./assets/${nameImage}.${extension}" class="${className}" alt="${alt != null ? alt : nameImage}"/>`;
 }
 
+export function getBox(elem) {
+  const box = elem.getBoundingClientRect();
+
+  return {
+    top: box.top + window.pageYOffset,
+    left: box.left + window.pageXOffset,
+    width: box.width,
+    height: box.height,
+  };
+}
+
 
 export function getTruncateHandler(element) {
   const text = element.innerHTML;
