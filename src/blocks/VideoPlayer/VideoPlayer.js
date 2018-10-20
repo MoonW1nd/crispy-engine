@@ -13,6 +13,8 @@ export default class VideoPlayer {
     this.contrastController = options.contrastController;
     this.audioAnalyser = options.audioAnalyser;
     this.setIntervalIndex = null;
+    this.hls = null;
+    this.currentLevel = null;
     this.dom = {};
     this.typeGrid = true;
     this.id = typeof VideoPlayer.id === 'number' && !Number.isNaN(VideoPlayer.id)
@@ -40,7 +42,6 @@ export default class VideoPlayer {
     this.dom.video = this.parent.querySelector(`.VideoPlayer_id_${this.id} .VideoPlayer-Video`);
     this.dom.canvas = this.parent.querySelector(`.VideoPlayer_id_${this.id} .VideoPlayer-Canvas`);
     this.dom.video.classList.add('VideoPlayer_hidden');
-    this.brightnessFilter = () => {};
     this.initVideo();
     this.initCanvas();
   }
@@ -108,15 +109,16 @@ export default class VideoPlayer {
     const playerBox = getBox(this.player);
     const fullScreenAreaBox = getBox(this.parent.parentNode);
 
+    // устанавливаем размеры для и позицию для элементов которые будут открываться на полный экран
     overlay.style.width = `${playerBox.width}px`;
     overlay.style.height = `${playerBox.height}px`;
     overlay.style.left = `${playerBox.left - fullScreenAreaBox.left}px`;
     overlay.style.top = `${playerBox.top - fullScreenAreaBox.top}px`;
 
-    canvas.style.width = `${playerBox.width}px`;
-    canvas.style.height = `${playerBox.height}px`;
-    canvas.style.left = `${playerBox.left - fullScreenAreaBox.left}px`;
-    canvas.style.top = `${playerBox.top - fullScreenAreaBox.top}px`;
+    canvas.style.width = overlay.style.width;
+    canvas.style.height = overlay.style.height;
+    canvas.style.left = overlay.style.left;
+    canvas.style.top = overlay.style.top;
 
     // рассчитываем transformOrigin
     const playerRelativeTop = playerBox.top - fullScreenAreaBox.top;
@@ -131,7 +133,6 @@ export default class VideoPlayer {
     document.querySelector('body').style.overflow = 'hidden';
 
     overlay.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
-    // canvas.style.transformOrigin = `${transformOriginX}% ${transformOriginY}%`;
 
     // рассчитываем коэффициенты трансформации и устанавливаем их
     const resolution = this.getVideoAspectRatio();

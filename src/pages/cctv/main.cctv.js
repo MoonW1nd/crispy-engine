@@ -62,11 +62,11 @@ window.addEventListener('load', () => {
       videoPlayers[`id_${id}`].closeFullScreen();
     });
 
-    RangeControllerLight.dom.input.addEventListener('change', () => {
+    RangeControllerLight.dom.input.addEventListener('input', () => {
       videoPlayers[`id_${id}`].brightnessChange(RangeControllerLight.dom.input.value);
     });
 
-    RangeControllerContrast.dom.input.addEventListener('change', () => {
+    RangeControllerContrast.dom.input.addEventListener('input', () => {
       videoPlayers[`id_${id}`].contrastChange(RangeControllerContrast.dom.input.value);
     });
 
