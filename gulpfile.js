@@ -18,6 +18,7 @@ const babelify = require('babelify'); //eslint-disable-line
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const htmlv = require('gulp-html-validator');
+const tsify = require('tsify');
 
 // DEFINE ENVIRONMENTS
 
@@ -91,23 +92,26 @@ function validateHTML() { //eslint-disable-line
 
 
 function createJavaScripBundle(sourceFolder, sourceFileName, dest) {
-  const bundleStream = browserify(`${sourceFolder}/${sourceFileName}`)
+  return browserify({
+    debug: true,
+    entries: [`${sourceFolder}/${sourceFileName}`],
+  })
+    .plugin(tsify, { stopOnError: false })
     .transform('babelify', babelOptions)
-    .bundle();
-
-  return bundleStream
+    .bundle()
+    .on('error', (error) => { console.error(error.toString()); })
     .pipe(source(sourceFileName))
     .pipe(buffer())
     .pipe(plumber())
-    .pipe(rename({ suffix: '.min' }))
+    .pipe(rename({ suffix: '.min', extname: '.js' }))
     .pipe(production(uglify()))
     .pipe(gulp.dest(dest));
 }
 
 
 function javaScript() {
-  createJavaScripBundle('src', 'main.js', 'build/js');
-  return createJavaScripBundle('src/pages/cctv', 'main.cctv.js', 'build/js');
+  return createJavaScripBundle('src', 'main.ts', 'build/js');
+  // return createJavaScripBundle('src/pages/cctv', 'main.cctv.js', 'build/js');
 }
 
 
