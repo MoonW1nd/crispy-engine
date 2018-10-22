@@ -8,7 +8,8 @@
     "start": "gulp build --env development",
     "build": "gulp build --env production",
     "htmlv": "gulp validateHTML",
-    "clean": "gulp clean"
+    "clean": "gulp clean",
+    "start-server": "nodemon ./server/index.js"
   },
   "husky": {
     "hooks": {
@@ -35,7 +36,7 @@
     "eslint": "^5.6.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp": "^4.0.0",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
