@@ -1,7 +1,7 @@
-import VideoPlayer from '../../blocks/VideoPlayer/VideoPlayer';
-import Button from '../../blocks/Button/Button';
-import RangeController from '../../blocks/RangeController/RangeController';
-import AudioAnalyser from '../../blocks/AudioAnalyser/AudioAnalyser';
+import VideoPlayer from 'blocks/VideoPlayer/VideoPlayer';
+import Button from 'blocks/Button/Button';
+import RangeController from 'blocks/RangeController/RangeController';
+import AudioAnalyser from 'blocks/AudioAnalyser/AudioAnalyser';
 
 /* global document window */
 

@@ -1,5 +1,5 @@
 /* global document window */
-import { getTemplateContent } from '../_helpers/_helpers';
+import { getTemplateContent } from 'blocks/_helpers/_helpers';
 
 export default class AudioAnalyser {
   constructor(options) {

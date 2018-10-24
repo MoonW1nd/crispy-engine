@@ -1,7 +1,7 @@
 /* global requestAnimationFrame Hls isNaN document */
-import { getTemplateContent, getBox } from '../_helpers/_helpers';
-import brightness from './filters/brightness.filter';
-import contrast from './filters/contrast.filter';
+import { getTemplateContent, getBox } from 'blocks/_helpers/_helpers';
+import brightness from 'blocks/VideoPlayer/filters/brightness.filter';
+import contrast from 'blocks/VideoPlayer/filters/contrast.filter';
 
 export default class VideoPlayer {
   constructor(options = {}) {

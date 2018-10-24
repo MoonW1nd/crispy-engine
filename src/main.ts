@@ -4,15 +4,16 @@ import touchEvents from './blocks/_helpers/_events';
 import { getTruncateHandler } from './blocks/_helpers/_helpers';
 
 
-const data = require('./data/events.json');
 
 function isTouchDevice() {
   return Boolean('ontouchstart' in window);
 }
 
-window.onload = () => {
+require(['text!data/events.json'], function(data){
+
   const parent = document.querySelector('.PageContent-ContentGrid');
 
+  data = JSON.parse(data);
   if (isTouchDevice()) {
     document.querySelector('body').classList.add('touch');
   }
@@ -52,4 +53,6 @@ window.onload = () => {
 
     window.addEventListener('resize', resizeThrottler, false);
   }());
-};
+})
+
+

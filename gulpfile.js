@@ -12,30 +12,31 @@ const clean = require('gulp-clean');
 const minifyHTML = require('gulp-htmlnano');
 const environments = require('gulp-environments');
 const removeEmptyLines = require('gulp-remove-empty-lines');
-const browserify = require('browserify');
+// const browserify = require('browserify');
 const postHTML = require('gulp-posthtml');
 const babelify = require('babelify'); //eslint-disable-line
-const source = require('vinyl-source-stream');
-const buffer = require('vinyl-buffer');
+// const source = require('vinyl-source-stream');
+// const buffer = require('vinyl-buffer');
 const htmlv = require('gulp-html-validator');
-const tsify = require('tsify');
+const ts = require('gulp-typescript');
+
 
 // DEFINE ENVIRONMENTS
 
 const { development, production } = environments;
 
-const babelOptions = {
-  presets: [
-    [
-      'env',
-      {
-        targets: {
-          browsers: ['last 2 versions'],
-        },
-      },
-    ],
-  ],
-};
+// const babelOptions = {
+//   presets: [
+//     [
+//       'env',
+//       {
+//         targets: {
+//           browsers: ['last 2 versions'],
+//         },
+//       },
+//     ],
+//   ],
+// };
 
 // FUNCTIONS
 
@@ -91,27 +92,36 @@ function validateHTML() { //eslint-disable-line
 }
 
 
-function createJavaScripBundle(sourceFolder, sourceFileName, dest) {
-  return browserify({
-    debug: true,
-    entries: [`${sourceFolder}/${sourceFileName}`],
-  })
-    .plugin(tsify, { stopOnError: false })
-    .transform('babelify', babelOptions)
-    .bundle()
-    .on('error', (error) => { console.error(error.toString()); })
-    .pipe(source(sourceFileName))
-    .pipe(buffer())
-    .pipe(plumber())
-    .pipe(rename({ suffix: '.min', extname: '.js' }))
-    .pipe(production(uglify()))
-    .pipe(gulp.dest(dest));
-}
+// function createJavaScripBundle(sourceFolder, sourceFileName, dest) {
+// return browserify({
+//   debug: true,
+//   entries: [`${sourceFolder}/${sourceFileName}`],
+// })
+//   .plugin(tsify, { stopOnError: false })
+//   .transform('babelify', babelOptions)
+//   .bundle()
+//   .on('error', (error) => { console.error(error.toString()); })
+//   .pipe(source(sourceFileName))
+//   .pipe(buffer())
+//   .pipe(plumber())
+// .pipe(rename({ suffix: '.min', extname: '.js' }))
+// .pipe(production(uglify()))
+// .pipe(gulp.dest(dest));
+// }
 
 
 function javaScript() {
-  return createJavaScripBundle('src', 'main.ts', 'build/js');
-  // return createJavaScripBundle('src/pages/cctv', 'main.cctv.js', 'build/js');
+  // return createJavaScripBundle('src', 'main.ts', 'build/js');
+//   // return createJavaScripBundle('src/pages/cctv', 'main.cctv.js', 'build/js');
+  const tsProject = ts.createProject('tsconfig.json');
+
+  return gulp.src(['src/*.ts', 'src/pages/cctv/*.ts'])
+    .pipe(tsProject())
+    .on('error', () => {})
+    .js
+    .pipe(rename({ suffix: '.min', extname: '.js' }))
+    .pipe(production(uglify()))
+    .pipe(gulp.dest('build/js'));
 }
 
 
@@ -136,19 +146,27 @@ function assets() {
     .pipe(gulp.dest('build/assets'));
 }
 
+function move() {
+  gulp.src(['src/blocks/_helpers/text.js'])
+    .pipe(gulp.dest('build/js'));
+
+  return gulp.src(['src/data/events.json'])
+    .pipe(gulp.dest('build/data'));
+}
+
 function watch() {
   gulp.watch('src/**/*.scss', styles).on('change', browserSync.reload);
   gulp.watch('src/assets/*.*', assets).on('change', browserSync.reload);
-  gulp.watch('src/**/*.js', javaScript).on('change', browserSync.reload);
+  gulp.watch('src/**/*.ts', javaScript).on('change', browserSync.reload);
   gulp.watch('src/**/*.html', html).on('change', browserSync.reload);
 }
 
 
 const build = production()
-  ? gulp.series(cleanBuild, gulp.parallel(styles, html, assets, javaScript))
+  ? gulp.series(cleanBuild, gulp.parallel(styles, move, html, assets, javaScript))
   : gulp.series(
     cleanBuild,
-    gulp.parallel(styles, html, assets, javaScript),
+    gulp.parallel(styles, html, assets, javaScript, move),
     gulp.parallel(watch, serve),
   );
 
