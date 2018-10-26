@@ -9,6 +9,17 @@ function isTouchDevice() {
   return Boolean('ontouchstart' in window);
 }
 
+export interface IEventData {
+  [id: string]: string | null;
+  'type': string;
+  'title': string;
+  'source': string;
+  'time': string;
+  'description': string | null;
+  'icon': string;
+  'size': string;
+}
+
 require(['text!data/events.json'], (data) => {
 
   const parent = document.querySelector('.PageContent-ContentGrid');
@@ -20,7 +31,7 @@ require(['text!data/events.json'], (data) => {
     if (body) { body.classList.add('touch'); }
   }
 
-  data.events.forEach((eventData: object) => {
+  data.events.forEach((eventData: IEventData) => {
     render(parent, eventData);
   });
 
