@@ -5,33 +5,33 @@ import renderConfirmButtonsWidget from '../ConfirmButtonsWidget/ConfirmButtonsWi
 import renderMusicWidget from '../MusicWidget/MusicWidget';
 import renderThermalWidget from '../ThermalWidget/ThermalWidget';
 
-interface ICardDataGraph {
+export interface ICardDataGraph {
   type?: string;
   values?: [];
 }
 
-interface ICardDataWeather {
+export interface ICardDataWeather {
   temperature?: number;
   humidity?: number;
 }
 
-interface ICardDataMusicPlayer {
+export interface ICardDataMusicPlayer {
   albumcover?: string;
   artist?: string;
   track?: ICardDataMusicTrack;
   volume?: number;
 }
 
-interface ICardDataMusicTrack {
+export interface ICardDataMusicTrack {
   name: string;
   length: string;
 }
 
-interface ICardDataButtons {
+export interface ICardDataButtons {
   buttons: string[];
 }
 
-interface ICardDataImage {
+export interface ICardDataImage {
   image: string;
 }
 
