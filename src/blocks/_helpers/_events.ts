@@ -17,13 +17,12 @@ interface ICurrentGesture {
 export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElement) {
   const element = domNode;
   const parent = parentNode.parentElement;
-  if (!parent) { throw Error('Not find parent node')}
+  if (!parent) { throw Error('Not find parent node'); }
   const zoomValueElement = parent.querySelector('.DataInfo-ZoomValue');
   const lightValueElement = parent.querySelector('.DataInfo-LightValue');
   let lightValue = 1;
   let currentGesture: ICurrentGesture | null = null;
   let pointers: IPointerInfo[] = [];
-
 
   // Парсит значение css свойства transform и возвращает нужное значение
   function getTransformValue(valueName: string) {
@@ -44,7 +43,6 @@ export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElemen
     return value;
   }
 
-
   parent.addEventListener('pointerdown', (event) => {
     element.setPointerCapture(event.pointerId);
     parent.style.transition = 'none';
@@ -53,11 +51,11 @@ export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElemen
 
     if (element.style.left) {
       currentGesture = {
+        currentPositionX: parseInt(String(/[-,0-9]+/.exec(element.style.left)), 10) || 0,
+        currentRotate: getTransformValue('rotate') || 0,
+        currentScale: getTransformValue('scale') || 1,
         prevDiameter: 0,
         prevRotate: 0,
-        currentPositionX: parseInt(String(/[-,0-9]+/.exec(element.style.left)), 10) || 0,
-        currentScale: getTransformValue('scale') || 1,
-        currentRotate: getTransformValue('rotate') || 0,
       };
     }
 
@@ -72,14 +70,13 @@ export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElemen
     pointers.push(pointerInfo);
   });
 
-
   element.addEventListener('pointermove', (event) => {
     if (!currentGesture) {
       return;
     }
 
     const currentPointerIndex = pointers.findIndex(
-      pointer => pointer.pointerId === event.pointerId,
+      (pointer) => pointer.pointerId === event.pointerId,
     );
 
     // Обработка свайпа
@@ -133,9 +130,9 @@ export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElemen
         heightRect = event.y - anotherPointer.y;
 
         let angle = Math.atan(-widthRect / heightRect);
-        if (heightRect < 0) angle += Math.PI;
+        if (heightRect < 0) { angle += Math.PI; }
         angle *= RAD_TO_DEG;
-        if (angle < 0) angle = 360 + angle;
+        if (angle < 0) { angle = 360 + angle; }
 
         if (currentGesture.prevRotate !== 0) {
           // убирает скачек при смене угла вращения 360 -> 0
@@ -179,7 +176,7 @@ export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElemen
 
         if (Math.abs(diff) > 5) {
           element.style.transform = `scale(${scale})`;
-          if (zoomValueElement) zoomValueElement.innerHTML = String(Math.round((scale - 1) * 100 / 9));
+          if (zoomValueElement) { zoomValueElement.innerHTML = String(Math.round((scale - 1) * 100 / 9)); }
           currentGesture.currentScale = scale;
         }
       }
@@ -188,9 +185,8 @@ export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElemen
     }
   });
 
-
-  const moveToStartPosition = (event) => {
-    pointers = pointers.filter(pointer => pointer.pointerId !== event.pointerId);
+  const moveToStartPosition = (event: PointerEvent) => {
+    pointers = pointers.filter((pointer) => pointer.pointerId !== event.pointerId);
     currentGesture = null;
   };
 
