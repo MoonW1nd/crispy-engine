@@ -6,20 +6,20 @@ import renderMusicWidget from '../MusicWidget/MusicWidget';
 import renderThermalWidget from '../ThermalWidget/ThermalWidget';
 
 export interface ICardDataGraph {
-  type?: string;
-  values?: [];
+  type: string;
+  values: [];
 }
 
 export interface ICardDataWeather {
-  temperature?: number;
-  humidity?: number;
+  temperature: number;
+  humidity: number;
 }
 
 export interface ICardDataMusicPlayer {
-  albumcover?: string;
-  artist?: string;
-  track?: ICardDataMusicTrack;
-  volume?: number;
+  albumcover: string;
+  artist: string;
+  track: ICardDataMusicTrack;
+  volume: number;
 }
 
 export interface ICardDataMusicTrack {
@@ -121,7 +121,7 @@ function getCardElements(templateContent: DocumentFragment): ICardDOM {
 
   if (Object.values(cardElements).some((value) => value === null)) { throw new Error('Не корректный шаблон карточки'); }
 
-  return cardElements as Ic;
+  return cardElements as ICardDOM;
 }
 
 interface IObjectStringKey {
