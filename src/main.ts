@@ -10,14 +10,14 @@ function isTouchDevice() {
 }
 
 export interface IEventData {
-  [id: string]: string | null;
-  'type': string;
-  'title': string;
-  'source': string;
-  'time': string;
-  'description': string | null;
-  'icon': string;
-  'size': string;
+  [id: string]: any;
+  type: string;
+  title: string;
+  source: string;
+  time: string;
+  description: string | null;
+  icon: string;
+  size: string;
 }
 
 require(['text!data/events.json'], (data) => {

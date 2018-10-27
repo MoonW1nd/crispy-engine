@@ -5,7 +5,12 @@ export function getTemplateContent(templateClassName: string) {
   return document.importNode(template.content, true);
 }
 
-export function getImageHtml(nameImage, extension, className, alt = null) {
+export function getImageHtml(
+  nameImage: string,
+  extension: string,
+  className: string,
+  alt: null | string = null,
+): string {
   if (extension === 'jpg' || extension === 'png') {
     return `<img src="./assets/${nameImage}.${extension}" class="${className}"
       srcset="
@@ -18,7 +23,14 @@ export function getImageHtml(nameImage, extension, className, alt = null) {
   return `<img src="./assets/${nameImage}.${extension}" class="${className}" alt="${alt != null ? alt : nameImage}"/>`;
 }
 
-export function getBox(elem: Element): object {
+export interface IElementBox {
+  height: number;
+  left: number;
+  top: number;
+  width: number;
+}
+
+export function getBox(elem: Element): IElementBox {
   const box = elem.getBoundingClientRect();
 
   return {

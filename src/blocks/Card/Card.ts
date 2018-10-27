@@ -5,7 +5,41 @@ import renderConfirmButtonsWidget from '../ConfirmButtonsWidget/ConfirmButtonsWi
 import renderMusicWidget from '../MusicWidget/MusicWidget';
 import renderThermalWidget from '../ThermalWidget/ThermalWidget';
 
-function setDataWidget(dataElement, data) {
+interface ICardDataGraph {
+  type?: string;
+  values?: [];
+}
+
+interface ICardDataWeather {
+  temperature?: number;
+  humidity?: number;
+}
+
+interface ICardDataMusicPlayer {
+  albumcover?: string;
+  artist?: string;
+  track?: ICardDataMusicTrack;
+  volume?: number;
+}
+
+interface ICardDataMusicTrack {
+  name: string;
+  length: string;
+}
+
+interface ICardDataButtons {
+  buttons: string[];
+}
+
+interface ICardDataImage {
+  image: string;
+}
+
+interface ICardData extends ICardDataButtons,
+  ICardDataGraph, ICardDataImage, ICardDataMusicPlayer, ICardDataButtons, ICardDataWeather {
+  }
+
+function setDataWidget(dataElement: Element, data: ICardData) {
   const element = dataElement;
   const isGraphWidget = data.type === 'graph';
   const isImageWidget = 'image' in data && typeof data.image === 'string';
@@ -87,7 +121,7 @@ function getCardElements(templateContent: DocumentFragment): ICardDOM {
 
   if (Object.values(cardElements).some((value) => value === null)) { throw new Error('Не корректный шаблон карточки'); }
 
-  return cardElements;
+  return cardElements as Ic;
 }
 
 interface IObjectStringKey {
