@@ -35,7 +35,7 @@ export interface ICardDataImage {
   image: string;
 }
 
-interface ICardData extends ICardDataButtons,
+export interface ICardData extends ICardDataButtons,
   ICardDataGraph, ICardDataImage, ICardDataMusicPlayer, ICardDataButtons, ICardDataWeather {
   }
 
