@@ -22,7 +22,7 @@ interface IVideoPlayerOptions {
   buttonPlay: Button;
   lightController: RangeController;
   contrastController: RangeController;
-  audioAnalyser: AudioAnalyser;
+  audioAnalyser?: AudioAnalyser;
 }
 
 export default class VideoPlayer {
@@ -34,7 +34,7 @@ export default class VideoPlayer {
   public buttonPlay: Button;
   public lightController: RangeController;
   public contrastController: RangeController;
-  public audioAnalyser: AudioAnalyser;
+  public audioAnalyser: AudioAnalyser | undefined;
   public currentLevel: number;
   public hls: Hls | null;
   public dom: IVideoPlayerDOMObject;
@@ -254,7 +254,7 @@ export default class VideoPlayer {
         this.button.show();
         this.lightController.show();
         this.contrastController.show();
-        this.audioAnalyser.show();
+        if (this.audioAnalyser) { this.audioAnalyser.show(); }
         this.isFullScreen = true;
         if (this.dom.video) { this.dom.video.muted = false; }
       } else {
@@ -275,7 +275,7 @@ export default class VideoPlayer {
     this.button.hide();
     this.lightController.hide();
     this.contrastController.hide();
-    this.audioAnalyser.hide();
+    if (this.audioAnalyser) { this.audioAnalyser.hide(); }
     overlay.style.transform = 'scale(1)';
     canvas.style.transform = 'scale(1) translate(0px, 0px)';
 

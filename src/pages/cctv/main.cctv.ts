@@ -57,9 +57,13 @@ window.addEventListener('load', () => {
       url,
     });
 
-    videoPlayers[`id_${id}`].player.addEventListener('click', () => {
-      videoPlayers[`id_${id}`].openFullScreen();
-    });
+    const videoPlayer = videoPlayers[`id_${id}`].player;
+
+    if (videoPlayer != null) {
+      videoPlayer.addEventListener('click', () => {
+        videoPlayers[`id_${id}`].openFullScreen();
+      });
+    }
 
     if (ButtonClose.view != null) {
       ButtonClose.view.addEventListener('click', () => {
@@ -67,22 +71,32 @@ window.addEventListener('load', () => {
       });
     }
 
-    RangeControllerLight.dom.input.addEventListener('input', () => {
-      videoPlayers[`id_${id}`].brightnessChange(RangeControllerLight.dom.input.value);
-    });
+    const rangeInput = RangeControllerLight.dom.input;
+    if (rangeInput != null) {
+      rangeInput.addEventListener('input', () => {
+        videoPlayers[`id_${id}`].brightnessChange(Number(rangeInput.value));
+      });
+    }
 
-    RangeControllerContrast.dom.input.addEventListener('input', () => {
-      videoPlayers[`id_${id}`].contrastChange(RangeControllerContrast.dom.input.value);
-    });
+    const contrastInput = RangeControllerContrast.dom.input;
+    if (contrastInput != null) {
+      contrastInput.addEventListener('input', () => {
+        videoPlayers[`id_${id}`].contrastChange(Number(contrastInput.value));
+      });
+    }
 
-    const analyser = new AudioAnalyser({
-      parent: videoGrid,
-      video: videoPlayers[`id_${id}`].dom.video,
-    });
+    const videoPlayerInstance = videoPlayers[`id_${id}`];
 
-    videoPlayers[`id_${id}`].audioAnalyser = analyser;
-    videoPlayers[`id_${id}`].analyserFunction = () => {
-      analyser.draw(analyser.data);
-    };
+    if (videoPlayerInstance.dom.video) {
+      const analyser = new AudioAnalyser({
+        parent: videoGrid,
+        video: videoPlayerInstance.dom.video,
+      });
+
+      videoPlayerInstance.audioAnalyser = analyser;
+      videoPlayerInstance.analyserFunction = () => {
+        analyser.draw();
+      };
+    }
   });
 });

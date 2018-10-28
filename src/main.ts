@@ -43,10 +43,13 @@ require(['text!data/events.json'], (data) => {
     truncateHandlers.push(truncate);
   });
 
-  const element = parent.querySelector('.Card-Data_type_image img');
+  const element: HTMLElement | null = parent.querySelector('.Card-Data_type_image img');
   if (!element) { throw Error('Снимок не найден'); }
+  const wrapper: HTMLElement | null = element.parentElement;
 
-  touchEvents(element.parentNode, element);
+  if (wrapper && element) {
+    touchEvents(wrapper, element);
+  }
 
   // оптимизация resize событий
   (() => {

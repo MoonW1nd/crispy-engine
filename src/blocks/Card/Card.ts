@@ -39,7 +39,7 @@ interface ICardData extends ICardDataButtons,
   ICardDataGraph, ICardDataImage, ICardDataMusicPlayer, ICardDataButtons, ICardDataWeather {
   }
 
-function setDataWidget(dataElement: Element, data: ICardData) {
+function setDataWidget(dataElement: HTMLElement, data: ICardData) {
   const element = dataElement;
   const isGraphWidget = data.type === 'graph';
   const isImageWidget = 'image' in data && typeof data.image === 'string';
@@ -94,16 +94,16 @@ function setDataWidget(dataElement: Element, data: ICardData) {
 }
 
 interface ICardDOM {
-  [id: string]: Element;
-  main: Element;
-  closeButton: Element;
-  nextButton: Element;
-  icon: Element;
-  title: Element;
-  source: Element;
-  time: Element;
-  description: Element;
-  data: Element;
+  [id: string]: HTMLElement;
+  main: HTMLElement;
+  closeButton: HTMLElement;
+  nextButton: HTMLElement;
+  icon: HTMLElement;
+  title: HTMLElement;
+  source: HTMLElement;
+  time: HTMLElement;
+  description: HTMLElement;
+  data: HTMLElement;
 }
 
 function getCardElements(templateContent: DocumentFragment): ICardDOM {
