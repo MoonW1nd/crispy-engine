@@ -39,7 +39,7 @@ export default class AudioAnalyser {
   constructor(options: IAudioAnalyserOptions) {
     this.className = options.className ? options.className : '';
     this.parent = options.parent;
-    this.visible = options.visible ? options.visible : true;
+    this.visible = !!options.visible;
     this.modifier = options.modifier ? options.modifier : '';
     this.video = options.video;
     this.width = options.width || 140;

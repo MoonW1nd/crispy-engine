@@ -1,4 +1,4 @@
-export default function brightness(imageData, change) {
+export default function brightness(imageData: ImageData, change: number) {
   const pixels = imageData.data;
 
   for (let i = 0; i < pixels.length; i += 4) {

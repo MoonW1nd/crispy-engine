@@ -30,7 +30,8 @@ export interface IElementBox {
   width: number;
 }
 
-export function getBox(elem: Element): IElementBox {
+export function getBox(elem: Element | null): IElementBox {
+  if (elem === null) { throw Error('Переданное значение === null'); }
   const box = elem.getBoundingClientRect();
 
   return {

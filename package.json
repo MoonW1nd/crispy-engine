@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/MoonW1nd/crispy-engine#readme",
   "devDependencies": {
+    "@types/hls.js": "^0.10.2",
     "ajv": "^6.5.4",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",

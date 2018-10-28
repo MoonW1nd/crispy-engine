@@ -76,7 +76,6 @@ function html() {
     .src(['src/pages/**/*.html'])
     .pipe(plumber())
     .pipe(postHTML(plugins, options))
-    .pipe(rename({ dirname: '' }))
     .pipe(minifyHTML())
     .pipe(gulp.dest('build/pages'));
 }
@@ -149,6 +148,9 @@ function assets() {
 function move() {
   gulp.src(['src/blocks/_helpers/text.js'])
     .pipe(gulp.dest('build/js'));
+
+  gulp.src(['src/blocks/VideoPlayer/lib/hls.js'])
+    .pipe(gulp.dest('build/pages/cctv/'));
 
   return gulp.src(['src/data/events.json'])
     .pipe(gulp.dest('build/data'));
