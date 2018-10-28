@@ -2,7 +2,7 @@
 import { getTemplateContent } from '../_helpers/_helpers';
 
 interface IRangeControllerDOM {
-  input: Element | null;
+  input: HTMLInputElement | null;
 }
 
 interface IRangeControllerOptions {

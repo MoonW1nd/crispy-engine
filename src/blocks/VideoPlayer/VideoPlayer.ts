@@ -243,8 +243,13 @@ export default class VideoPlayer {
         canvas.width = this.hls.levels[currentLevel].width;
         canvas.height = this.hls.levels[currentLevel].height;
 
-        this.lightController.dom.input.value = this.brightness;
-        this.contrastController.dom.input.value = this.contrast;
+        if (this.lightController.dom.input) {
+          this.lightController.dom.input.value = String(this.brightness);
+        }
+
+        if (this.contrastController.dom.input) {
+          this.contrastController.dom.input.value = String(this.contrast);
+        }
 
         this.button.show();
         this.lightController.show();
@@ -298,6 +303,7 @@ export default class VideoPlayer {
       canvas.width = this.hls.levels[0].width;
       canvas.height = this.hls.levels[0].height;
       this.isFullScreen = false;
+      this.dom.video.muted = true;
 
       const DEFAULT_ASPECT_RATIO = 1.75;
       const resolution = this.getVideoAspectRatio();
