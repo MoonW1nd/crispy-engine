@@ -62,7 +62,7 @@ require(['text!data/events.json'], (data) => {
     let resizeTimeout: number | null;
     function resizeThrottler() {
       if (!resizeTimeout) {
-        resizeTimeout = setTimeout(() => {
+        resizeTimeout = window.setTimeout(() => {
           resizeTimeout = null;
           actualResizeHandler();
         }, 66);
