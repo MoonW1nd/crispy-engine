@@ -1,13 +1,16 @@
-import VideoPlayer from 'blocks/VideoPlayer/VideoPlayer';
+import AudioAnalyser from 'blocks/AudioAnalyser/AudioAnalyser';
 import Button from 'blocks/Button/Button';
 import RangeController from 'blocks/RangeController/RangeController';
-import AudioAnalyser from 'blocks/AudioAnalyser/AudioAnalyser';
-
+import VideoPlayer from 'blocks/VideoPlayer/VideoPlayer';
 /* global document window */
 
+interface IVideoPlayersList {
+  [id: string]: VideoPlayer;
+}
+
 window.addEventListener('load', () => {
-  const videoGrid = document.querySelector('.PageContent-VideoGrid');
-  const videoPlayers = {};
+  const videoGrid = document.querySelector<HTMLElement>('.PageContent-VideoGrid');
+  const videoPlayers: IVideoPlayersList = {};
   const localIP = 'localhost';
   const videoLinks = [
     `http://${localIP}:9191/master?url=http%3A%2F%2F${localIP}%3A3102%2Fstreams%2Fsosed%2Fmaster.m3u8`,
@@ -16,51 +19,53 @@ window.addEventListener('load', () => {
     `http://${localIP}:9191/master?url=http%3A%2F%2F${localIP}%3A3102%2Fstreams%2Fhall%2Fmaster.m3u8`,
   ];
 
+  if (videoGrid == null) { throw Error('Не найдена сетка видео'); }
   const ButtonClose = new Button({
     content: 'все камеры',
-    parent: videoGrid,
     modifier: 'VideoGrid-ButtonClose',
+    parent: videoGrid,
   });
 
   const ButtonPlay = new Button({
     content: 'вкл. видео',
-    parent: videoGrid,
     modifier: 'VideoGrid-ButtonPlay',
+    parent: videoGrid,
   });
 
-
   const RangeControllerLight = new RangeController({
-    parent: videoGrid,
     modifier: 'VideoGrid-LightController',
-    rangeMin: -200,
+    parent: videoGrid,
     rangeMax: 200,
+    rangeMin: -200,
   });
 
   const RangeControllerContrast = new RangeController({
-    parent: videoGrid,
     modifier: 'VideoGrid-ContrastController',
-    type: 'contrast',
-    rangeMin: 0,
+    parent: videoGrid,
     rangeMax: 100,
+    rangeMin: 0,
+    type: 'contrast',
   });
 
   videoLinks.forEach((url, id) => {
     videoPlayers[`id_${id}`] = new VideoPlayer({
-      parent: videoGrid,
-      url,
       button: ButtonClose,
       buttonPlay: ButtonPlay,
-      lightController: RangeControllerLight,
       contrastController: RangeControllerContrast,
+      lightController: RangeControllerLight,
+      parent: videoGrid,
+      url,
     });
 
     videoPlayers[`id_${id}`].player.addEventListener('click', () => {
       videoPlayers[`id_${id}`].openFullScreen();
     });
 
-    ButtonClose.view.addEventListener('click', () => {
-      videoPlayers[`id_${id}`].closeFullScreen();
-    });
+    if (ButtonClose.view != null) {
+      ButtonClose.view.addEventListener('click', () => {
+        videoPlayers[`id_${id}`].closeFullScreen();
+      });
+    }
 
     RangeControllerLight.dom.input.addEventListener('input', () => {
       videoPlayers[`id_${id}`].brightnessChange(RangeControllerLight.dom.input.value);
