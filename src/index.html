@@ -16,5 +16,14 @@
   <include src="content/events/PageContent.html"></include>
   <include src="blocks/Footer/Footer.html"></include>
 </body>
+<script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
 <script src="./js/main.min.js"></script>
+<script>
+require.config({
+  paths: {
+    text: 'js/text'
+  }
+});
+require(["main"]);
+</script>
 </html>

@@ -1,10 +1,45 @@
 /* global document */
+import { IEventData } from '../../main';
 import { getImageHtml, getTemplateContent } from '../_helpers/_helpers';
 import renderConfirmButtonsWidget from '../ConfirmButtonsWidget/ConfirmButtonsWidget';
-import renderThermalWidget from '../ThermalWidget/ThermalWidget';
 import renderMusicWidget from '../MusicWidget/MusicWidget';
+import renderThermalWidget from '../ThermalWidget/ThermalWidget';
 
-function setDataWidget(dataElement, data) {
+export interface ICardDataGraph {
+  type: string;
+  values: [];
+}
+
+export interface ICardDataWeather {
+  temperature: number;
+  humidity: number;
+}
+
+export interface ICardDataMusicPlayer {
+  albumcover: string;
+  artist: string;
+  track: ICardDataMusicTrack;
+  volume: number;
+}
+
+export interface ICardDataMusicTrack {
+  name: string;
+  length: string;
+}
+
+export interface ICardDataButtons {
+  buttons: string[];
+}
+
+export interface ICardDataImage {
+  image: string;
+}
+
+export interface ICardData extends ICardDataButtons,
+  ICardDataGraph, ICardDataImage, ICardDataMusicPlayer, ICardDataButtons, ICardDataWeather {
+  }
+
+function setDataWidget(dataElement: HTMLElement, data: ICardData) {
   const element = dataElement;
   const isGraphWidget = data.type === 'graph';
   const isImageWidget = 'image' in data && typeof data.image === 'string';
@@ -58,25 +93,42 @@ function setDataWidget(dataElement, data) {
   }
 }
 
-
-function getCardElements(templateContent) {
-  const elements = {};
-
-  elements.main = templateContent.querySelector('.Card');
-  elements.closeButton = templateContent.querySelector('.Card-CloseButton');
-  elements.nextButton = templateContent.querySelector('.Card-NextButton');
-  elements.icon = templateContent.querySelector('.Title-IconWrapper');
-  elements.title = templateContent.querySelector('.Title-Content');
-  elements.source = templateContent.querySelector('.Card-Source');
-  elements.time = templateContent.querySelector('.Card-Time');
-  elements.description = templateContent.querySelector('.Card-Description');
-  elements.data = templateContent.querySelector('.Card-Data');
-
-  return elements;
+interface ICardDOM {
+  [id: string]: HTMLElement;
+  main: HTMLElement;
+  closeButton: HTMLElement;
+  nextButton: HTMLElement;
+  icon: HTMLElement;
+  title: HTMLElement;
+  source: HTMLElement;
+  time: HTMLElement;
+  description: HTMLElement;
+  data: HTMLElement;
 }
 
+function getCardElements(templateContent: DocumentFragment): ICardDOM {
+  const cardElements = {
+    closeButton: templateContent.querySelector('.Card-CloseButton'),
+    data: templateContent.querySelector('.Card-Data'),
+    description: templateContent.querySelector('.Card-Description'),
+    icon: templateContent.querySelector('.Title-IconWrapper'),
+    main: templateContent.querySelector('.Card'),
+    nextButton: templateContent.querySelector('.Card-NextButton'),
+    source: templateContent.querySelector('.Card-Source'),
+    time: templateContent.querySelector('.Card-Time'),
+    title: templateContent.querySelector('.Title-Content'),
+  };
 
-export function render(parent, cardData) {
+  if (Object.values(cardElements).some((value) => value === null)) { throw new Error('Не корректный шаблон карточки'); }
+
+  return cardElements as ICardDOM;
+}
+
+interface IObjectStringKey {
+  [id: string]: string;
+}
+
+export function render(parent: Element, cardData: IEventData) {
   const templateContent = getTemplateContent('CardTemplate');
   const cardElements = getCardElements(templateContent);
 
@@ -117,12 +169,15 @@ export function render(parent, cardData) {
 
   Object.keys(cardElements).forEach((element) => {
     if (!cardElements[element].innerHTML.trim()) {
-      cardElements[element].parentNode.removeChild(cardElements[element]);
+      const parentNode = cardElements[element].parentNode;
+      if (parentNode) {
+        parentNode.removeChild(cardElements[element]);
+      }
     }
   });
 
   const contentWrapper = templateContent.querySelector('.Card-Content');
-  if (!contentWrapper.innerHTML.trim()) {
+  if (contentWrapper && !contentWrapper.innerHTML.trim() && contentWrapper.parentNode) {
     contentWrapper.parentNode.removeChild(contentWrapper);
   }
 

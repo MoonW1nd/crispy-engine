@@ -1,7 +1,8 @@
 /* global document */
 import { getTemplateContent } from '../_helpers/_helpers';
+import { ICardDataMusicPlayer } from '../Card/Card';
 
-export default function renderMusicWidget(parent, data) {
+export default function renderMusicWidget(parent: Element, data: ICardDataMusicPlayer) {
   const templateContent = getTemplateContent('MusicWidgetTemplate');
 
   const albumImage = templateContent.querySelector('.MusicWidget-AlbumImage');
@@ -10,12 +11,15 @@ export default function renderMusicWidget(parent, data) {
   const trackDuration = templateContent.querySelector('.MusicWidget-TrackDuration');
   const volumeValue = templateContent.querySelector('.MusicWidget-VolumeValue');
 
-
-  albumImage.setAttribute('src', data.albumcover);
-  artist.innerHTML = data.artist;
-  trackName.innerHTML = data.track.name;
-  trackDuration.innerHTML = data.track.length;
-  volumeValue.innerHTML = data.volume;
+  if (albumImage && artist && trackName && trackDuration && volumeValue) {
+    albumImage.setAttribute('src', data.albumcover);
+    artist.innerHTML = data.artist;
+    trackName.innerHTML = data.track.name;
+    trackDuration.innerHTML = data.track.length;
+    volumeValue.innerHTML = String(data.volume);
+  } else {
+    throw Error('Не корректный шаблон для MusicWidget');
+  }
 
   const clone = document.importNode(templateContent, true);
   parent.appendChild(clone);

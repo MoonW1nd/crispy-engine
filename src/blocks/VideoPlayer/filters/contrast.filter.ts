@@ -1,13 +1,14 @@
-function getColorValue(value) {
+function getColorValue(value: number) {
   if (value > 255) {
     return 255;
-  } if (value < 0) {
+  } else if (value < 0) {
     return 0;
   }
+
   return value;
 }
 
-export default function contrast(imageData, change) {
+export default function contrast(imageData: ImageData, change: number) {
   const pixels = imageData.data;
 
   const contrastValue = ((100 + change) / 100) ** 2;
@@ -24,5 +25,6 @@ export default function contrast(imageData, change) {
     pixels[i + 1] = getColorValue(gg);
     pixels[i + 2] = getColorValue(bg);
   }
+
   return imageData;
 }

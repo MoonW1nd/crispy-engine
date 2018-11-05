@@ -1,11 +1,16 @@
 /* global document window */
-export function getTemplateContent(templateClassName) {
-  const template = document.getElementsByClassName(templateClassName)[0];
+export function getTemplateContent(templateClassName: string) {
+  const template = document.querySelector<HTMLTemplateElement>(`.${templateClassName}`);
+  if (!template) { throw new Error('Шаблон не найден'); }
   return document.importNode(template.content, true);
 }
 
-
-export function getImageHtml(nameImage, extension, className, alt = null) {
+export function getImageHtml(
+  nameImage: string,
+  extension: string,
+  className: string,
+  alt: null | string = null,
+): string {
   if (extension === 'jpg' || extension === 'png') {
     return `<img src="./assets/${nameImage}.${extension}" class="${className}"
       srcset="
@@ -18,19 +23,26 @@ export function getImageHtml(nameImage, extension, className, alt = null) {
   return `<img src="./assets/${nameImage}.${extension}" class="${className}" alt="${alt != null ? alt : nameImage}"/>`;
 }
 
-export function getBox(elem) {
+export interface IElementBox {
+  height: number;
+  left: number;
+  top: number;
+  width: number;
+}
+
+export function getBox(elem: Element | null): IElementBox {
+  if (elem === null) { throw Error('Переданное значение === null'); }
   const box = elem.getBoundingClientRect();
 
   return {
-    top: box.top + window.pageYOffset,
-    left: box.left + window.pageXOffset,
-    width: box.width,
     height: box.height,
+    left: box.left + window.pageXOffset,
+    top: box.top + window.pageYOffset,
+    width: box.width,
   };
 }
 
-
-export function getTruncateHandler(element) {
+export function getTruncateHandler(element: Element) {
   const text = element.innerHTML;
   const title = element;
   return () => {
@@ -49,7 +61,7 @@ export function getTruncateHandler(element) {
     clone.innerHTML = text;
 
     let l = text.length - 1;
-    for (; l >= 0 && clone.clientHeight > targetHeight; --l) { //eslint-disable-line
+    for (; l >= 0 && clone.clientHeight > targetHeight; --l) { // eslint-disable-line
       clone.innerHTML = `${text.substring(0, l)}...`;
     }
 

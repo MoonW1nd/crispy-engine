@@ -1,28 +1,47 @@
-export default function touchEvents(parentNode, domNode) {
-  const element = domNode;
-  const parent = parentNode;
-  const zoomValueElement = parent.parentNode.querySelector('.DataInfo-ZoomValue');
-  const lightValueElement = parent.parentNode.querySelector('.DataInfo-LightValue');
-  let lightValue = 1;
-  let currentGesture = null;
-  let pointers = [];
+interface IPointerInfo {
+  pointerId: number;
+  prevX: number;
+  prevY: number;
+  x: number;
+  y: number;
+}
 
+interface ICurrentGesture {
+  prevDiameter: number;
+  prevRotate: number;
+  currentPositionX: number;
+  currentScale: number;
+  currentRotate: number;
+}
+
+export default function touchEvents(parentNode: HTMLElement, domNode: HTMLElement) {
+  const element = domNode;
+  const parent = parentNode.parentElement;
+  if (!parent) { throw Error('Not find parent node'); }
+  const zoomValueElement = parent.querySelector('.DataInfo-ZoomValue');
+  const lightValueElement = parent.querySelector('.DataInfo-LightValue');
+  let lightValue = 1;
+  let currentGesture: ICurrentGesture | null = null;
+  let pointers: IPointerInfo[] = [];
 
   // Парсит значение css свойства transform и возвращает нужное значение
-  function getTransformValue(valueName) {
+  function getTransformValue(valueName: string) {
     const transformValue = element.style.transform;
-    let value = null;
+    let value: number | null = null;
 
-    transformValue.split(' ').forEach((rule) => {
-      const regexp = new RegExp(valueName);
-      if (regexp.test(rule)) {
-        value = parseFloat(/[-,0-9,.]+/.exec(rule));
-      }
-    });
+    if (transformValue) {
+      transformValue.split(' ').forEach((rule) => {
+        const regexp = new RegExp(valueName);
+
+        if (regexp.test(rule)) {
+          const searchResult = /[-,0-9,.]+/.exec(rule);
+          value = parseFloat(String(searchResult));
+        }
+      });
+    }
 
     return value;
   }
-
 
   parent.addEventListener('pointerdown', (event) => {
     element.setPointerCapture(event.pointerId);
@@ -30,13 +49,15 @@ export default function touchEvents(parentNode, domNode) {
     parent.style.userSelect = 'none';
     parent.style.touchAction = 'none';
 
-    currentGesture = {
-      prevDiameter: 0,
-      prevRotate: 0,
-      currentPositionX: parseInt(/[-,0-9]+/.exec(element.style.left), 10) || 0,
-      currentScale: getTransformValue('scale') || 1,
-      currentRotate: getTransformValue('rotate') || 0,
-    };
+    if (element.style.left) {
+      currentGesture = {
+        currentPositionX: parseInt(String(/[-,0-9]+/.exec(element.style.left)), 10) || 0,
+        currentRotate: getTransformValue('rotate') || 0,
+        currentScale: getTransformValue('scale') || 1,
+        prevDiameter: 0,
+        prevRotate: 0,
+      };
+    }
 
     const pointerInfo = {
       pointerId: event.pointerId,
@@ -49,14 +70,13 @@ export default function touchEvents(parentNode, domNode) {
     pointers.push(pointerInfo);
   });
 
-
   element.addEventListener('pointermove', (event) => {
     if (!currentGesture) {
       return;
     }
 
     const currentPointerIndex = pointers.findIndex(
-      pointer => pointer.pointerId === event.pointerId,
+      (pointer) => pointer.pointerId === event.pointerId,
     );
 
     // Обработка свайпа
@@ -110,9 +130,9 @@ export default function touchEvents(parentNode, domNode) {
         heightRect = event.y - anotherPointer.y;
 
         let angle = Math.atan(-widthRect / heightRect);
-        if (heightRect < 0) angle += Math.PI;
+        if (heightRect < 0) { angle += Math.PI; }
         angle *= RAD_TO_DEG;
-        if (angle < 0) angle = 360 + angle;
+        if (angle < 0) { angle = 360 + angle; }
 
         if (currentGesture.prevRotate !== 0) {
           // убирает скачек при смене угла вращения 360 -> 0
@@ -131,7 +151,10 @@ export default function touchEvents(parentNode, domNode) {
           }
 
           element.style.filter = `brightness(${lightValue})`;
-          lightValueElement.innerHTML = Math.round((lightValue - 0.5) * 100 / 5);
+
+          if (lightValueElement) {
+            lightValueElement.innerHTML = String(Math.round((lightValue - 0.5) * 100 / 5));
+          }
 
           currentGesture.currentRotate = rotate;
         }
@@ -153,7 +176,7 @@ export default function touchEvents(parentNode, domNode) {
 
         if (Math.abs(diff) > 5) {
           element.style.transform = `scale(${scale})`;
-          zoomValueElement.innerHTML = Math.round((scale - 1) * 100 / 9);
+          if (zoomValueElement) { zoomValueElement.innerHTML = String(Math.round((scale - 1) * 100 / 9)); }
           currentGesture.currentScale = scale;
         }
       }
@@ -162,9 +185,8 @@ export default function touchEvents(parentNode, domNode) {
     }
   });
 
-
-  const moveToStartPosition = (event) => {
-    pointers = pointers.filter(pointer => pointer.pointerId !== event.pointerId);
+  const moveToStartPosition = (event: PointerEvent) => {
+    pointers = pointers.filter((pointer) => pointer.pointerId !== event.pointerId);
     currentGesture = null;
   };
 
