@@ -14,7 +14,7 @@ window.addEventListener('load', () => {
   const Dispatcher = new iFlux.Dispatcher();
   const Actions = new iFlux.Actions(Dispatcher);
 
-  const initialStore = {
+  let initialStore = {
     videos: {
       id_0: {
         brightness: 0,
@@ -34,6 +34,13 @@ window.addEventListener('load', () => {
       },
     },
   };
+
+  const storage = window.localStorage.getItem('iFluxStorage');
+  if (storage) {
+    initialStore = JSON.parse(storage);
+  } else {
+    window.localStorage.setItem('iFluxStorage', JSON.stringify(initialStore));
+  }
 
   const Store = iFlux.Store.createStore(initialStore, Dispatcher);
   Actions.create('CHANGE_BRIGHTNESS', null);
@@ -55,6 +62,8 @@ window.addEventListener('load', () => {
         break;
       }
     }
+
+    window.localStorage.setItem('iFluxStorage', JSON.stringify(Store.getStore()));
   };
 
   Store.registerActions(storeActionHandlers);
@@ -121,26 +130,34 @@ window.addEventListener('load', () => {
       });
     }
 
+    // Блок с "тригером" actions
     const rangeInput = RangeControllerLight.dom.input;
     if (rangeInput != null) {
       rangeInput.addEventListener('input', () => {
-        Actions.changeBrightness({ playerId: `id_${id}`, value: Number(rangeInput.value) });
+        if (videoPlayers[`id_${id}`].isFullScreen) {
+          Actions.changeBrightness({ playerId: `id_${id}`, value: Number(rangeInput.value) });
+        }
       });
     }
 
     const contrastInput = RangeControllerContrast.dom.input;
     if (contrastInput != null) {
       contrastInput.addEventListener('input', () => {
-        Actions.changeContrast({ playerId: `id_${id}`, value: Number(contrastInput.value) });
+        if (videoPlayers[`id_${id}`].isFullScreen) {
+          Actions.changeContrast({ playerId: `id_${id}`, value: Number(contrastInput.value) });
+        }
       });
     }
 
+    // Подписываем обработчики которые будут менять view на изменение Storage
     Store.addListener(() => {
       const currentState = Store.getStore();
       const videoPlayerId = `id_${id}`;
       const brightness = currentState.videos[videoPlayerId].brightness;
+      videoPlayers[videoPlayerId].brightness = brightness;
       videoPlayers[videoPlayerId].brightnessChange(brightness);
     });
+
     Store.addListener(() => {
       const currentState = Store.getStore();
       const videoPlayerId = `id_${id}`;
@@ -162,4 +179,7 @@ window.addEventListener('load', () => {
       };
     }
   });
+
+  // Для установки данных которые пришли из localStorage
+  Store.emitChange();
 });

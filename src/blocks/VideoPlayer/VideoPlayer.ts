@@ -128,33 +128,29 @@ export default class VideoPlayer {
   }
 
   public brightnessChange(value: number) {
-    if (this.isFullScreen) {
-      this.brightness = value;
+    this.brightness = value;
 
-      this.brightnessFilter = (context) => {
-        if (this.dom.canvas) {
-          const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
-          const imageDataFiltered = brightness(imageData, Number(value));
+    this.brightnessFilter = (context) => {
+      if (this.dom.canvas) {
+        const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
+        const imageDataFiltered = brightness(imageData, Number(value));
 
-          context.putImageData(imageDataFiltered, 0, 0);
-        }
-      };
-    }
+        context.putImageData(imageDataFiltered, 0, 0);
+      }
+    };
   }
 
   public contrastChange(value: number) {
-    if (this.isFullScreen) {
-      this.contrast = value;
+    this.contrast = value;
 
-      this.contrastFilter = (context) => {
-        if (this.dom.canvas) {
-          const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
-          const imageDataFiltered = contrast(imageData, Number(value));
+    this.contrastFilter = (context) => {
+      if (this.dom.canvas) {
+        const imageData = context.getImageData(0, 0, this.dom.canvas.width, this.dom.canvas.height);
+        const imageDataFiltered = contrast(imageData, Number(value));
 
-          context.putImageData(imageDataFiltered, 0, 0);
-        }
-      };
-    }
+        context.putImageData(imageDataFiltered, 0, 0);
+      }
+    };
   }
 
   public openFullScreen() {
