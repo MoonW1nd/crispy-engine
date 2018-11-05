@@ -35,7 +35,7 @@ function createStore(store: any, dispatcher: Dispatcher) {
       this.callbacks = [];
     }
 
-    public registerActions(actionsHandlers: (payload: IPayload) => {}): void {
+    public registerActions(actionsHandlers: (payload: IPayload) => void): void {
       const resultFunction = (payload: IPayload) => {
         actionsHandlers(payload);
 

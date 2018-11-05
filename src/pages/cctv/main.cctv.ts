@@ -1,7 +1,9 @@
+import iFlux from 'blocks/_helpers/iFlux/index';
 import AudioAnalyser from 'blocks/AudioAnalyser/AudioAnalyser';
 import Button from 'blocks/Button/Button';
 import RangeController from 'blocks/RangeController/RangeController';
 import VideoPlayer from 'blocks/VideoPlayer/VideoPlayer';
+import { IPayload } from '../../blocks/_helpers/iFlux/src/Dispatcher';
 /* global document window */
 
 interface IVideoPlayersList {
@@ -9,6 +11,54 @@ interface IVideoPlayersList {
 }
 
 window.addEventListener('load', () => {
+  const Dispatcher = new iFlux.Dispatcher();
+  const Actions = new iFlux.Actions(Dispatcher);
+
+  const initialStore = {
+    videos: {
+      id_0: {
+        brightness: 0,
+        contrast: 0,
+      },
+      id_1: {
+        brightness: 0,
+        contrast: 0,
+      },
+      id_2: {
+        brightness: 0,
+        contrast: 0,
+      },
+      id_3: {
+        brightness: 0,
+        contrast: 0,
+      },
+    },
+  };
+
+  const Store = iFlux.Store.createStore(initialStore, Dispatcher);
+  Actions.create('CHANGE_BRIGHTNESS', null);
+  Actions.create('CHANGE_CONTRAST', null);
+
+  const storeActionHandlers = (payload: IPayload): void => {
+    switch (payload.action) {
+      case Actions.list.CHANGE_BRIGHTNESS: {
+        const newStoreValue = Store.getStore();
+        newStoreValue.videos[payload.data.playerId].brightness = payload.data.value;
+        Store.updateStore(newStoreValue);
+        break;
+      }
+
+      case Actions.list.CHANGE_CONTRAST: {
+        const newStoreValue = Store.getStore();
+        newStoreValue.videos[payload.data.playerId].contrast = payload.data.value;
+        Store.updateStore(newStoreValue);
+        break;
+      }
+    }
+  };
+
+  Store.registerActions(storeActionHandlers);
+
   const videoGrid = document.querySelector<HTMLElement>('.PageContent-VideoGrid');
   const videoPlayers: IVideoPlayersList = {};
   const localIP = 'localhost';
@@ -74,16 +124,29 @@ window.addEventListener('load', () => {
     const rangeInput = RangeControllerLight.dom.input;
     if (rangeInput != null) {
       rangeInput.addEventListener('input', () => {
-        videoPlayers[`id_${id}`].brightnessChange(Number(rangeInput.value));
+        Actions.changeBrightness({ playerId: `id_${id}`, value: Number(rangeInput.value) });
       });
     }
 
     const contrastInput = RangeControllerContrast.dom.input;
     if (contrastInput != null) {
       contrastInput.addEventListener('input', () => {
-        videoPlayers[`id_${id}`].contrastChange(Number(contrastInput.value));
+        Actions.changeContrast({ playerId: `id_${id}`, value: Number(contrastInput.value) });
       });
     }
+
+    Store.addListener(() => {
+      const currentState = Store.getStore();
+      const videoPlayerId = `id_${id}`;
+      const brightness = currentState.videos[videoPlayerId].brightness;
+      videoPlayers[videoPlayerId].brightnessChange(brightness);
+    });
+    Store.addListener(() => {
+      const currentState = Store.getStore();
+      const videoPlayerId = `id_${id}`;
+      const contrast = currentState.videos[videoPlayerId].contrast;
+      videoPlayers[videoPlayerId].contrastChange(contrast);
+    });
 
     const videoPlayerInstance = videoPlayers[`id_${id}`];
 
